@@ -1,22 +1,29 @@
-package com.application.monkifyapp
+package com.application.monkifyapp.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.WindowCompat
 import com.application.monkifyapp.navigation.Navigation
 import com.application.monkifyapp.ui.theme.MonkifyAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    val viewModel by viewModels<MainViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        installSplashScreen().apply {
+            setKeepOnScreenCondition{
+                viewModel.splashCondition
+            }
+        }
         super.onCreate(savedInstanceState)
         actionBar?.hide()
         setContent {
             MonkifyAppTheme {
-
-              Navigation()
+                val startDestination=viewModel.startDestination
+              Navigation(startDestination = startDestination)
             }
         }
     }
