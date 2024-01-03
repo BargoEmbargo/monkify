@@ -1,6 +1,7 @@
 package com.application.monkifyapp.navigation
 
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,13 +15,18 @@ import com.application.monkifyapp.screens.onBoarding.viewModel.OnBoardingViewMod
 fun Navigation(startDestination:String) {
     val navController= rememberNavController()
     val viewModel: OnBoardingViewModel = hiltViewModel()
+    var selectedTab by rememberSaveable { mutableStateOf(0) }
 
     NavHost(navController = navController, startDestination = startDestination ){
         composable(NavigationGraph.HomeScreen.name){
-            HomeScreen()
+            HomeScreen(navController = navController,selectedTab){newTab->
+                selectedTab=newTab
+            }
         }
         composable(NavigationGraph.PlanScreen.name){
-            PlanScreen()
+            PlanScreen(navController = navController,selectedTab=selectedTab){newTab->
+                selectedTab=newTab
+            }
         }
         composable(NavigationGraph.BoardingScreen.name){
             BoardingScreen(navController = navController, event = {
