@@ -8,12 +8,12 @@ import androidx.navigation.compose.rememberNavController
 import com.application.monkify.screens.home.HomeScreen
 import com.application.monkify.screens.plan.PlanScreen
 import com.application.monkifyapp.screens.onBoarding.BoardingScreen
-import com.application.monkifyapp.screens.onBoarding.OnBoardingViewModel
+import com.application.monkifyapp.screens.onBoarding.viewModel.OnBoardingViewModel
 
 @Composable
 fun Navigation(startDestination:String) {
     val navController= rememberNavController()
-    val viewModel: OnBoardingViewModel= hiltViewModel()
+    val viewModel: OnBoardingViewModel = hiltViewModel()
 
     NavHost(navController = navController, startDestination = startDestination ){
         composable(NavigationGraph.HomeScreen.name){
