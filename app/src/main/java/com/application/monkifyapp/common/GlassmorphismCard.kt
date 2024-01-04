@@ -11,17 +11,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun GlassmorpismCard(
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    size:Dp,
+    content: @Composable () -> Unit,
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .size(height = 520.dp, width = 10.dp)
+            .size(height = size, width = 1.dp)
             .clip(RoundedCornerShape(20.dp))
             .border(
                 2.dp, brush = Brush.verticalGradient(

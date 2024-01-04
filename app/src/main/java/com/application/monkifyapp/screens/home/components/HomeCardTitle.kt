@@ -44,6 +44,5 @@ fun HomeCardTitle() {
         text = "Good job!\nThis is your longest streak so far \uD83D\uDE0D.",
         modifier = Modifier.padding(start = 24.dp, top = 10.dp),
         color= Color.White,
-
         )
 }

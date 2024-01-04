@@ -10,13 +10,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.application.monkifyapp.ui.theme.robotoFontFamily
 
+//Title above the glassmorphism card
 @Composable
-fun HomeTitle() {
+fun Title(title:String) {
     Text(
         modifier = Modifier.padding(top = 24.dp, bottom = 10.dp),
-        text = "Welcome Back!",
+        text = title,
         color = Color.White,
-        fontSize = 32.sp,
+        fontSize = 24.sp,
         fontFamily= robotoFontFamily,
         fontWeight = FontWeight.Bold
     )
