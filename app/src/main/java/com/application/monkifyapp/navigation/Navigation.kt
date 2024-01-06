@@ -10,6 +10,7 @@ import com.application.monkify.screens.home.HomeScreen
 import com.application.monkify.screens.plan.PlanScreen
 import com.application.monkifyapp.screens.onBoarding.BoardingScreen
 import com.application.monkifyapp.screens.onBoarding.viewModel.OnBoardingViewModel
+import com.application.monkifyapp.screens.task.TaskScreen
 
 @Composable
 fun Navigation(startDestination:String) {
@@ -32,6 +33,9 @@ fun Navigation(startDestination:String) {
             BoardingScreen(navController = navController, event = {
                 viewModel.onEvent(it)
             })
+        }
+        composable(NavigationGraph.TaskScreen.name){
+            TaskScreen(navController=navController)
         }
     }
 }
