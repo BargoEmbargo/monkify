@@ -9,6 +9,7 @@ import com.application.monkifyapp.domain.manager.LocalUserManager
 import com.application.monkifyapp.domain.useCases.AppEntryUseCases
 import com.application.monkifyapp.domain.useCases.ReadAppEntry
 import com.application.monkifyapp.domain.useCases.SaveAppEntry
+import com.application.monkifyapp.util.Constants.DATABASE_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,7 +43,7 @@ object AppModule {
         return Room.databaseBuilder(
             context = application,
             klass = InfoDatabase::class.java,
-            name = "info_db"
+            name = DATABASE_NAME
         ).fallbackToDestructiveMigration()
             .build()
     }

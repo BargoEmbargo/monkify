@@ -11,6 +11,7 @@ import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -24,11 +25,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.application.monkifyapp.common.MainScaffold
 import com.application.monkifyapp.domain.model.ToggleableInfo
 import com.application.monkifyapp.navigation.NavigationGraph
 import com.application.monkifyapp.screens.home.components.*
 import com.application.monkifyapp.ui.theme.Cyan
+import com.application.monkifyapp.R
+
 
 @Composable
 fun PlanScreen(navController:NavController,selectedTab:Int,onTabSelected: (Int) -> Unit) {
@@ -66,11 +73,7 @@ fun PlanScreen(navController:NavController,selectedTab:Int,onTabSelected: (Int) 
                            }
                        }
                        Spacer(modifier = Modifier.weight(1f))
-                       Box(modifier = Modifier
-                           .size(100.dp)
-                           .clip(CircleShape)
-                           .background(Cyan)
-                          )
+                       LoopingLottieAnimation(animationResId = R.raw.fire)
                    }
                 }
             }
@@ -93,8 +96,8 @@ fun PlanScreen(navController:NavController,selectedTab:Int,onTabSelected: (Int) 
 fun CheckBoxGoals(checkList:MutableList<ToggleableInfo>) {
     Column(
         modifier = Modifier
-        .fillMaxSize()
-        .padding(horizontal = 10.dp, vertical = 9.dp)) {
+            .fillMaxSize()
+            .padding(horizontal = 10.dp, vertical = 9.dp)) {
         checkList.forEachIndexed { index, toggleableInfo ->
             Row(modifier=Modifier.padding(top = 5.dp), verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(checked = toggleableInfo.isChecked, onCheckedChange = {checkList[index]=toggleableInfo.copy(isChecked =it)})
@@ -138,6 +141,18 @@ fun AchievementText(text:String,color:Color) {
             color = Color.White,
             fontSize = 14.sp,
             fontWeight = FontWeight.SemiBold
+        )
+    }
+}
+@Composable
+fun LoopingLottieAnimation(animationResId: Int) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(animationResId))
+
+    composition?.let { composition ->
+        LottieAnimation(
+            modifier=Modifier.padding(top = 24.dp, end = 10.dp).size(70.dp),
+            composition = composition,
+            iterations = LottieConstants.IterateForever // This will make the animation loop
         )
     }
 }

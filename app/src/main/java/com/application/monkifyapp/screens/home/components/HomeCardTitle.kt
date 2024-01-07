@@ -12,6 +12,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.application.monkify.screens.plan.LoopingLottieAnimation
+import com.application.monkifyapp.R
 
 @Composable
 fun HomeCardTitle() {
@@ -32,13 +34,7 @@ fun HomeCardTitle() {
             )
         }
         Spacer(modifier = Modifier.weight(1f))
-        Icon(
-            imageVector = Icons.Default.Home,
-            contentDescription = "icon",
-            modifier = Modifier
-                .padding(end = 24.dp, top = 24.dp)
-                .size(50.dp)
-        )
+        LoopingLottieAnimation(animationResId = R.raw.fire)
     }
     Text(
         text = "Good job!\nThis is your longest streak so far \uD83D\uDE0D.",
