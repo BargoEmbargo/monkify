@@ -35,6 +35,7 @@ import com.application.monkifyapp.navigation.NavigationGraph
 import com.application.monkifyapp.screens.home.components.*
 import com.application.monkifyapp.ui.theme.Cyan
 import com.application.monkifyapp.R
+import com.application.monkifyapp.domain.model.AchievementEmojis
 
 
 @Composable
@@ -43,7 +44,6 @@ fun PlanScreen(navController:NavController,selectedTab:Int,onTabSelected: (Int) 
         mutableStateListOf(
             ToggleableInfo(1,true,"1"),
             ToggleableInfo(2,false,"2"),
-            ToggleableInfo(3,true,"3")
         )
     }
     MainScaffold(navController = navController,selectedTab,onTabSelected =onTabSelected) {
@@ -73,7 +73,7 @@ fun PlanScreen(navController:NavController,selectedTab:Int,onTabSelected: (Int) 
                            }
                        }
                        Spacer(modifier = Modifier.weight(1f))
-                       LoopingLottieAnimation(animationResId = R.raw.fire)
+                       LoopingLottieAnimation(animationResId = chooseAchievementEmoji(2))
                    }
                 }
             }
@@ -166,6 +166,13 @@ fun PlanTitle(text:String) {
         fontSize = 20.sp,
         fontWeight = FontWeight.Bold
     )
+}
+fun chooseAchievementEmoji(value :Int) : Int {
+    return when(value){
+        1-> AchievementEmojis.Fire.res
+        2-> AchievementEmojis.Sad.res
+        else -> AchievementEmojis.Fire.res
+    }
 }
 
 @Preview

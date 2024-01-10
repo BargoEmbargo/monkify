@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.application.monkify.screens.plan.LoopingLottieAnimation
+import com.application.monkify.screens.plan.chooseAchievementEmoji
 import com.application.monkifyapp.R
 
 @Composable
@@ -34,7 +35,7 @@ fun HomeCardTitle() {
             )
         }
         Spacer(modifier = Modifier.weight(1f))
-        LoopingLottieAnimation(animationResId = R.raw.fire)
+        LoopingLottieAnimation(animationResId = chooseAchievementEmoji(1))
     }
     Text(
         text = "Good job!\nThis is your longest streak so far \uD83D\uDE0D.",
