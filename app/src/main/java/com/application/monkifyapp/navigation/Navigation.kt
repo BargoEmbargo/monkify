@@ -11,12 +11,14 @@ import com.application.monkify.screens.plan.PlanScreen
 import com.application.monkifyapp.screens.onBoarding.BoardingScreen
 import com.application.monkifyapp.screens.onBoarding.viewModel.OnBoardingViewModel
 import com.application.monkifyapp.screens.task.TaskScreen
+import com.application.monkifyapp.screens.task.TaskViewModel
 
 @Composable
 fun Navigation(startDestination:String) {
     val navController= rememberNavController()
     val viewModel: OnBoardingViewModel = hiltViewModel()
     var selectedTab by rememberSaveable { mutableStateOf(0) }
+    val taskViewModel= androidx.lifecycle.viewmodel.compose.viewModel<TaskViewModel>()
 
     NavHost(navController = navController, startDestination = startDestination ){
         composable(NavigationGraph.HomeScreen.name){
@@ -25,7 +27,7 @@ fun Navigation(startDestination:String) {
             }
         }
         composable(NavigationGraph.PlanScreen.name){
-            PlanScreen(navController = navController,selectedTab=selectedTab){newTab->
+            PlanScreen(navController = navController,selectedTab=selectedTab, taskViewModel = taskViewModel){newTab->
                 selectedTab=newTab
             }
         }

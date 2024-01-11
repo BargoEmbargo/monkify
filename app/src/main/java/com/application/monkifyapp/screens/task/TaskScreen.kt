@@ -2,14 +2,18 @@ package com.application.monkifyapp.screens.task
 
 
 import android.annotation.SuppressLint
+import android.widget.Space
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -49,11 +53,13 @@ fun TaskScreen(navController: NavController) {
         Column( modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
+            .navigationBarsPadding()
             .padding(24.dp))
         {
             Column(
                 modifier=Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally) {
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Title(title ="Add new task")
                 TaskTextFieldInput(
                     nameValue = trytext,
@@ -68,11 +74,15 @@ fun TaskScreen(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
                 DropDownTaskMenu()
+                Column(
+                    modifier=Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Bottom
+                ) {
+                    TaskButton(onAddClick = {}, onDeleteClick = {})
+                }
             }
         }
-
     }
-
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -160,6 +170,48 @@ fun TaskTextFieldInput(nameValue: String = "", onNameChange: (value: String) -> 
     }
 }
 
+
+@Composable
+fun TaskButton(onAddClick:()->Unit,onDeleteClick:()->Unit) {
+    Row(
+
+    ) {
+        Button(
+            shape= RoundedCornerShape(4.dp),
+            colors= ButtonDefaults.buttonColors(Color(0xFF726FFF)),
+            modifier= Modifier
+                .weight(1f)
+                .height(60.dp),
+            onClick = {onAddClick()}
+        ) {
+            Text(
+                text = "Add",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+        }
+        Spacer(modifier = Modifier.width(20.dp))
+        Button(
+            shape= RoundedCornerShape(4.dp),
+            colors= ButtonDefaults.buttonColors(Color(0xFFFF6F6F)),
+            modifier= Modifier
+                .weight(1f)
+                .height(60.dp),
+            onClick = {onDeleteClick()}
+        ) {
+            Text(
+                text = "Delete",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Icon(imageVector = Icons.Default.Delete, contentDescription = "Add")
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropDownTaskMenu() {
@@ -167,7 +219,7 @@ fun DropDownTaskMenu() {
         mutableStateOf(false)
     }
     var menuText by remember {
-        mutableStateOf("")
+        mutableStateOf("Choose...")
     }
     Column(modifier = Modifier.fillMaxWidth()) {
         TaskScreenTitle(text = "Category")

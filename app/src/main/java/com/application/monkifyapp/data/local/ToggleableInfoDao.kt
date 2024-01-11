@@ -8,11 +8,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ToggleableInfoDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsert(info:ToggleableInfo)
+    @Upsert()
+    suspend fun upsertInfo(info:ToggleableInfo)
 
     @Delete
-    suspend fun delete(info:ToggleableInfo)
+    suspend fun deleteInfo(info:ToggleableInfo)
 
     @Query("SELECT * FROM $TABLE_DATABASE_NAME")
     fun getArticles(): Flow<List<ToggleableInfo>>
