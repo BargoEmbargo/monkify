@@ -3,6 +3,7 @@ package com.application.monkifyapp.screens.task
 
 import android.annotation.SuppressLint
 import android.widget.Space
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,11 +26,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.room.util.appendPlaceholders
@@ -41,14 +44,20 @@ import com.application.monkifyapp.common.BackgroundImage
 import com.application.monkifyapp.common.CustomBottomBar
 import com.application.monkifyapp.common.MainScaffold
 import com.application.monkifyapp.common.TopAppBarMonkify
+import com.application.monkifyapp.domain.model.ToggleableInfo
 import com.application.monkifyapp.screens.home.components.Title
 import com.application.monkifyapp.ui.theme.Cyan
+import kotlinx.coroutines.launch
 
 @Composable
-fun TaskScreen(navController: NavController) {
-    var trytext by remember {
+fun TaskScreen(navController: NavController,taskViewModel: TaskViewModel= hiltViewModel()) {
+    var nameText by remember {
         mutableStateOf("")
     }
+    var descriptionText by remember {
+        mutableStateOf("")
+    }
+    val scope = rememberCoroutineScope()
     TaskScaffold(navController = navController) {
         Column( modifier = Modifier
             .fillMaxSize()
@@ -62,14 +71,14 @@ fun TaskScreen(navController: NavController) {
             ) {
                 Title(title ="Add new task")
                 TaskTextFieldInput(
-                    nameValue = trytext,
-                    onNameChange = {trytext=it},
+                    nameValue = nameText,
+                    onNameChange = {nameText=it},
                     textFieldTitle = "Name"
                 )
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
                 TaskTextFieldInput(
-                    nameValue = trytext,
-                    onNameChange = {trytext=it},
+                    nameValue = descriptionText,
+                    onNameChange = {descriptionText=it},
                     textFieldTitle = "Description"
                 )
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
@@ -78,12 +87,28 @@ fun TaskScreen(navController: NavController) {
                     modifier=Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Bottom
                 ) {
-                    TaskButton(onAddClick = {}, onDeleteClick = {})
+                    TaskButton(onAddClick = {
+                            if(descriptionText.isNotEmpty()&& nameText.isNotEmpty()){
+                                scope.launch {
+                                    taskViewModel.upsertInfo(ToggleableInfo(descriptionText=descriptionText, name = nameText))
+                                    descriptionText=""
+                                    nameText=""
+                                }
+                            }
+
+                    }, onDeleteClick = {})
                 }
             }
         }
     }
 }
+@Composable
+fun showToast(message: String) {
+    val context = LocalContext.current
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+}
+
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)

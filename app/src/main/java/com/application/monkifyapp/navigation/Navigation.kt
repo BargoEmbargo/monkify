@@ -37,7 +37,7 @@ fun Navigation(startDestination:String) {
             })
         }
         composable(NavigationGraph.TaskScreen.name){
-            TaskScreen(navController=navController)
+            TaskScreen(navController=navController,taskViewModel=taskViewModel)
         }
     }
 }

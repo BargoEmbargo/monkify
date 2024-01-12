@@ -1,5 +1,6 @@
 package com.application.monkify.screens.plan
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -45,14 +46,7 @@ fun PlanScreen(
     val list = taskViewModel.infoList.collectAsState().value
     val scope = rememberCoroutineScope()
 
-    scope.launch {
-        taskViewModel.upsertInfo(
-            ToggleableInfo(1,true,"PLS WORK")
-        )
-        taskViewModel.upsertInfo(
-            ToggleableInfo(2,false,"PLS WORK1")
-        )
-    }
+
 
     MainScaffold(navController = navController,selectedTab,onTabSelected =onTabSelected) {
         Column(
@@ -94,14 +88,14 @@ fun PlanScreen(
                 }
             }
             GlassmorpismCard(size = 170.dp) {
-                CheckBoxGoals(checkList = list)
+                CheckBoxGoals(checkList = list, taskViewModel = taskViewModel)
             }
         }
     }
 }
 
 @Composable
-fun CheckBoxGoals(checkList:List<ToggleableInfo>) {
+fun CheckBoxGoals(checkList:List<ToggleableInfo>,taskViewModel: TaskViewModel) {
     val scope = rememberCoroutineScope()
     Column(
         modifier = Modifier
@@ -111,11 +105,14 @@ fun CheckBoxGoals(checkList:List<ToggleableInfo>) {
             Row(modifier=Modifier.padding(top = 5.dp), verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(checked = toggleableInfo.isChecked, onCheckedChange = {
                     scope.launch {
-//                        checkList[index]=toggleableInfo.copy(isChecked =it)
-                        println(toggleableInfo.isChecked)
+                        val updatedList = checkList.toMutableList()
+                        updatedList[index] = toggleableInfo.copy(isChecked = it)
+                        // Update the state using the viewModel
+                        println(toggleableInfo.id)
+                        taskViewModel.updateInfoList(updatedList)
                     }
                 })
-                Text(text = toggleableInfo.text)
+                Text(text = toggleableInfo.descriptionText)
             }
         }
     }

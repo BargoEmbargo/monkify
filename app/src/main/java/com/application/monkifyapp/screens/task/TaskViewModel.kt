@@ -36,4 +36,9 @@ class TaskViewModel @Inject constructor(private val infoRepository: InfoReposito
         infoRepository.deleteInfo(info)
     }
 
+    // Add this function to update the info list
+    fun updateInfoList(newList: List<ToggleableInfo>) {
+        _infoList.value = newList
+    }
+
 }
