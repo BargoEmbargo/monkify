@@ -96,19 +96,17 @@ fun TaskScreen(navController: NavController,taskViewModel: TaskViewModel= hiltVi
                                 }
                             }
 
-                    }, onDeleteClick = {})
+                    }, onDeleteClick = {
+                        scope.launch {
+                            taskViewModel.deleteAllInfo()
+                            taskViewModel.updateInfoList(emptyList())
+                        }
+                    })
                 }
             }
         }
     }
 }
-@Composable
-fun showToast(message: String) {
-    val context = LocalContext.current
-    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-}
-
-
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)

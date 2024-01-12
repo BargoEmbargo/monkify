@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -28,9 +29,11 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.application.monkifyapp.common.MainScaffold
+import com.application.monkifyapp.data.local.ToggleableInfoDao
 import com.application.monkifyapp.domain.model.AchievementEmojis
 import com.application.monkifyapp.domain.model.ToggleableInfo
 import com.application.monkifyapp.navigation.NavigationGraph
+import com.application.monkifyapp.repository.InfoRepository
 import com.application.monkifyapp.screens.home.components.GlassmorpismCard
 import com.application.monkifyapp.screens.home.components.Title
 import com.application.monkifyapp.screens.task.TaskViewModel
@@ -44,9 +47,6 @@ fun PlanScreen(
     onTabSelected: (Int) -> Unit
 ) {
     val list = taskViewModel.infoList.collectAsState().value
-    val scope = rememberCoroutineScope()
-
-
 
     MainScaffold(navController = navController,selectedTab,onTabSelected =onTabSelected) {
         Column(
@@ -87,7 +87,7 @@ fun PlanScreen(
                    navController.navigate(NavigationGraph.TaskScreen.name)
                 }
             }
-            GlassmorpismCard(size = 170.dp) {
+            GlassmorpismCard(size = 270.dp) {
                 CheckBoxGoals(checkList = list, taskViewModel = taskViewModel)
             }
         }
@@ -102,20 +102,36 @@ fun CheckBoxGoals(checkList:List<ToggleableInfo>,taskViewModel: TaskViewModel) {
             .fillMaxSize()
             .padding(horizontal = 10.dp, vertical = 9.dp)) {
         checkList.forEachIndexed { index, toggleableInfo ->
-            Row(modifier=Modifier.padding(top = 5.dp), verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(checked = toggleableInfo.isChecked, onCheckedChange = {
-                    scope.launch {
-                        val updatedList = checkList.toMutableList()
-                        updatedList[index] = toggleableInfo.copy(isChecked = it)
-                        // Update the state using the viewModel
-                        println(toggleableInfo.id)
-                        taskViewModel.updateInfoList(updatedList)
-                        taskViewModel.upsertInfo(toggleableInfo.copy(isChecked = it))
-                    }
-                })
-                Text(text = toggleableInfo.descriptionText)
+                Row(
+                    modifier = Modifier.padding(top = 5.dp, start = 14.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "${index+1}.",
+                        color=Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Checkbox(
+                        colors=CheckboxDefaults.colors(Cyan),
+                        checked = toggleableInfo.isChecked,
+                        onCheckedChange = {
+                        scope.launch {
+                            val updatedList = checkList.toMutableList()
+                            updatedList[index] = toggleableInfo.copy(isChecked = it)
+                            // Update the state using the viewModel
+                            println(toggleableInfo.id)
+                            taskViewModel.updateInfoList(updatedList)
+                            taskViewModel.upsertInfo(toggleableInfo.copy(isChecked = it))
+                        }
+                    })
+                    Text(
+                        text = toggleableInfo.descriptionText,
+                        fontSize = 16.sp,
+                        color=Color.White
+
+                    )
+                }
             }
-        }
     }
 }
 
@@ -191,5 +207,6 @@ fun chooseAchievementEmoji(value :Int) : Int {
 @Preview
 @Composable
 fun PlanScreenPreview() {
-    PlanScreen(navController = rememberNavController(), selectedTab = 1, onTabSelected = {})
+    val taskViewModel= androidx.lifecycle.viewmodel.compose.viewModel<TaskViewModel>()
+    PlanScreen(navController = rememberNavController(), selectedTab = 1, onTabSelected = {}, taskViewModel = taskViewModel)
 }

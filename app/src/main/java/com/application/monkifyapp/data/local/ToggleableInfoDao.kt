@@ -17,4 +17,7 @@ interface ToggleableInfoDao {
     @Query("SELECT * FROM $TABLE_DATABASE_NAME")
     fun getArticles(): Flow<List<ToggleableInfo>>
 
+    @Query("DELETE FROM $TABLE_DATABASE_NAME")
+    suspend fun deleteAllInfo()
+
 }

@@ -16,4 +16,6 @@ class InfoRepository @Inject constructor(private val infoDao: ToggleableInfoDao)
     fun getArticles(): Flow<List<ToggleableInfo>> {
         return  infoDao.getArticles()
     }
+
+    suspend fun deleteAllInfo(){infoDao.deleteAllInfo()}
 }
