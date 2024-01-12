@@ -2,6 +2,7 @@ package com.application.monkifyapp.screens.task
 
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.widget.Space
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -40,10 +41,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.application.monkifyapp.R
-import com.application.monkifyapp.common.BackgroundImage
-import com.application.monkifyapp.common.CustomBottomBar
-import com.application.monkifyapp.common.MainScaffold
-import com.application.monkifyapp.common.TopAppBarMonkify
+import com.application.monkifyapp.common.*
 import com.application.monkifyapp.domain.model.ToggleableInfo
 import com.application.monkifyapp.screens.home.components.Title
 import com.application.monkifyapp.ui.theme.Cyan
@@ -51,6 +49,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun TaskScreen(navController: NavController,taskViewModel: TaskViewModel= hiltViewModel()) {
+    val context = LocalContext.current
     var nameText by remember {
         mutableStateOf("")
     }
@@ -91,15 +90,19 @@ fun TaskScreen(navController: NavController,taskViewModel: TaskViewModel= hiltVi
                             if(descriptionText.isNotEmpty()&& nameText.isNotEmpty()){
                                 scope.launch {
                                     taskViewModel.upsertInfo(ToggleableInfo(descriptionText=descriptionText, name = nameText))
+                                    customToastMessage(context = context, message ="Task added" )
                                     descriptionText=""
                                     nameText=""
                                 }
+                            }else{
+                                customToastMessage(context = context, message ="Please add a description for the task" )
                             }
 
                     }, onDeleteClick = {
                         scope.launch {
                             taskViewModel.deleteAllInfo()
                             taskViewModel.updateInfoList(emptyList())
+                            customToastMessage(context = context, message ="Tasks Deleted" )
                         }
                     })
                 }
@@ -107,6 +110,9 @@ fun TaskScreen(navController: NavController,taskViewModel: TaskViewModel= hiltVi
         }
     }
 }
+
+
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
