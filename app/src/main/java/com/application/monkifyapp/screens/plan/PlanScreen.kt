@@ -110,6 +110,7 @@ fun CheckBoxGoals(checkList:List<ToggleableInfo>,taskViewModel: TaskViewModel) {
                         // Update the state using the viewModel
                         println(toggleableInfo.id)
                         taskViewModel.updateInfoList(updatedList)
+                        taskViewModel.upsertInfo(toggleableInfo.copy(isChecked = it))
                     }
                 })
                 Text(text = toggleableInfo.descriptionText)
