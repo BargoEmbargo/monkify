@@ -11,5 +11,5 @@ data class ToggleableInfo(
     var id:Int=0,
     var isChecked:Boolean=false,
     var descriptionText:String,
-    var name:String,
+    var categoryTask:String,
     )

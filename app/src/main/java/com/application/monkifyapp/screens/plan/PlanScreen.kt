@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,6 +38,7 @@ import com.application.monkifyapp.navigation.NavigationGraph
 import com.application.monkifyapp.repository.InfoRepository
 import com.application.monkifyapp.screens.home.components.GlassmorpismCard
 import com.application.monkifyapp.screens.home.components.Title
+import com.application.monkifyapp.screens.task.CategoryTask
 import com.application.monkifyapp.screens.task.TaskViewModel
 import com.application.monkifyapp.ui.theme.Cyan
 import kotlinx.coroutines.launch
@@ -130,8 +133,23 @@ fun CheckBoxGoals(checkList:List<ToggleableInfo>,taskViewModel: TaskViewModel) {
                         color=Color.White
 
                     )
+                    Row(
+                        modifier=Modifier.fillMaxWidth().padding(end = 14.dp),
+                        horizontalArrangement = Arrangement.End) {
+                        Icon(imageVector = calculateIcon(toggleableInfo.categoryTask), contentDescription = "Task Icon")
+                    }
                 }
             }
+    }
+}
+
+fun calculateIcon(categoryName:String):ImageVector{
+    return when(categoryName){
+        CategoryTask.Exercise.title->CategoryTask.Exercise.icon
+        CategoryTask.Stydying.title->CategoryTask.Stydying.icon
+        CategoryTask.Reading.title->CategoryTask.Reading.icon
+        CategoryTask.Other.title->CategoryTask.Other.icon
+        else -> CategoryTask.Exercise.icon
     }
 }
 

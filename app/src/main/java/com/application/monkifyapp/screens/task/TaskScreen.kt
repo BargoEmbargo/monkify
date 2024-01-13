@@ -50,11 +50,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun TaskScreen(navController: NavController,taskViewModel: TaskViewModel= hiltViewModel()) {
     val context = LocalContext.current
-    var nameText by remember {
-        mutableStateOf("")
-    }
     var descriptionText by remember {
         mutableStateOf("")
+    }
+    var categoryText by remember {
+        mutableStateOf("Choose...")
     }
     val scope = rememberCoroutineScope()
     TaskScaffold(navController = navController) {
@@ -69,11 +69,6 @@ fun TaskScreen(navController: NavController,taskViewModel: TaskViewModel= hiltVi
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Title(title ="Add new task")
-                TaskTextFieldInput(
-                    nameValue = nameText,
-                    onNameChange = {nameText=it},
-                    textFieldTitle = "Name"
-                )
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
                 TaskTextFieldInput(
                     nameValue = descriptionText,
@@ -81,18 +76,20 @@ fun TaskScreen(navController: NavController,taskViewModel: TaskViewModel= hiltVi
                     textFieldTitle = "Description"
                 )
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
-                DropDownTaskMenu()
+                DropDownTaskMenu(categoryText){category->
+                    categoryText=category
+                }
                 Column(
                     modifier=Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Bottom
                 ) {
                     TaskButton(onAddClick = {
-                            if(descriptionText.isNotEmpty()&& nameText.isNotEmpty()){
+                            if(descriptionText.isNotEmpty() && categoryText!="Choose..."){
                                 scope.launch {
-                                    taskViewModel.upsertInfo(ToggleableInfo(descriptionText=descriptionText, name = nameText))
+                                    taskViewModel.upsertInfo(ToggleableInfo(descriptionText=descriptionText, categoryTask = categoryText))
                                     customToastMessage(context = context, message ="Task added" )
                                     descriptionText=""
-                                    nameText=""
+
                                 }
                             }else{
                                 customToastMessage(context = context, message ="Please add a description for the task" )
@@ -243,12 +240,12 @@ fun TaskButton(onAddClick:()->Unit,onDeleteClick:()->Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropDownTaskMenu() {
+fun DropDownTaskMenu(categoryText1:String,categoryText:(String)->Unit) {
     var isExpanded by remember {
         mutableStateOf(false)
     }
     var menuText by remember {
-        mutableStateOf("Choose...")
+        mutableStateOf(categoryText1)
     }
     Column(modifier = Modifier.fillMaxWidth()) {
         TaskScreenTitle(text = "Category")
@@ -273,23 +270,26 @@ fun DropDownTaskMenu() {
                 onDismissRequest = { isExpanded=false}) {
                 DropdownMenuItem(
                     colors = MenuDefaults.itemColors(textColor = Color.White),
-                    text = {  Text(text = "Exercise") },
+                    text = {  Text(text = CategoryTask.Exercise.title) },
                     onClick = {
-                        menuText="Exercise"
+                        menuText=CategoryTask.Exercise.title
+                        categoryText(menuText)
                         isExpanded=false }
                 )
                 DropdownMenuItem(
                     colors = MenuDefaults.itemColors(textColor = Color.White),
-                    text = { Text(text = "Studying") },
+                    text = { Text(text = CategoryTask.Stydying.title) },
                     onClick = {
-                        menuText="Studying"
+                        menuText= CategoryTask.Stydying.title
+                        categoryText(menuText)
                         isExpanded=false }
                 )
                 DropdownMenuItem(
                     colors = MenuDefaults.itemColors(textColor = Color.White),
-                    text = {  Text(text = "Other") },
+                    text = {  Text(CategoryTask.Other.title) },
                     onClick = {
-                        menuText="Other"
+                        menuText= CategoryTask.Other.title
+                        categoryText(menuText)
                         isExpanded=false }
                 )
             }
