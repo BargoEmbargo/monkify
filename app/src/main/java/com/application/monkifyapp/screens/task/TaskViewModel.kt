@@ -7,6 +7,7 @@ import com.application.monkifyapp.domain.model.ToggleableInfo
 import com.application.monkifyapp.repository.InfoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
@@ -38,6 +39,12 @@ class TaskViewModel @Inject constructor(private val infoRepository: InfoReposito
 
     suspend fun deleteAllInfo()=viewModelScope.launch {
         infoRepository.deleteAllInfo()
+    }
+
+    suspend fun getInfoById(id: Int): ToggleableInfo {
+        return viewModelScope.async {
+            infoRepository.getInfoById(id)
+        }.await()
     }
 
     // Add this function to update the info list

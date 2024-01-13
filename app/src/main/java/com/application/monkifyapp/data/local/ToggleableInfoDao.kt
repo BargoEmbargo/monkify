@@ -20,4 +20,7 @@ interface ToggleableInfoDao {
     @Query("DELETE FROM $TABLE_DATABASE_NAME")
     suspend fun deleteAllInfo()
 
+    @Query("SELECT * FROM $TABLE_DATABASE_NAME WHERE id=:id")
+    suspend fun getInfoById(id:Int):ToggleableInfo
+
 }

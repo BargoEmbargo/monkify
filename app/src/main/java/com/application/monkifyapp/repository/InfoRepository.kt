@@ -18,4 +18,6 @@ class InfoRepository @Inject constructor(private val infoDao: ToggleableInfoDao)
     }
 
     suspend fun deleteAllInfo(){infoDao.deleteAllInfo()}
+
+    suspend fun getInfoById(id:Int):ToggleableInfo{ return infoDao.getInfoById(id=id)}
 }

@@ -3,9 +3,11 @@ package com.application.monkifyapp.navigation
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.application.monkify.screens.home.HomeScreen
 import com.application.monkify.screens.plan.PlanScreen
 import com.application.monkifyapp.screens.onBoarding.BoardingScreen
@@ -19,6 +21,7 @@ fun Navigation(startDestination:String) {
     val viewModel: OnBoardingViewModel = hiltViewModel()
     var selectedTab by rememberSaveable { mutableStateOf(0) }
     val taskViewModel= androidx.lifecycle.viewmodel.compose.viewModel<TaskViewModel>()
+    val route = NavigationGraph.TaskScreen.name
 
     NavHost(navController = navController, startDestination = startDestination ){
         composable(NavigationGraph.HomeScreen.name){
@@ -36,8 +39,15 @@ fun Navigation(startDestination:String) {
                 viewModel.onEvent(it)
             })
         }
-        composable(NavigationGraph.TaskScreen.name){
-            TaskScreen(navController=navController,taskViewModel=taskViewModel)
+        composable("$route/{id}",
+            arguments = listOf(navArgument(name = "id"){
+                type= NavType.IntType
+                defaultValue= 0
+            })
+        ){backStackEntry ->
+            // Your composable content
+            val id = backStackEntry.arguments?.getInt("id") ?: 0
+            TaskScreen(navController=navController,taskViewModel=taskViewModel,id=id)
         }
     }
 }

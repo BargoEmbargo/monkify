@@ -87,18 +87,20 @@ fun PlanScreen(
                 PlanTitle("Daily goals")
                 Spacer(modifier = Modifier.weight(1f))
                 SetupText {
-                   navController.navigate(NavigationGraph.TaskScreen.name)
+                    navController.navigate("${NavigationGraph.TaskScreen.name}/-1")
                 }
             }
             GlassmorpismCard(size = 270.dp) {
-                CheckBoxGoals(checkList = list, taskViewModel = taskViewModel)
+                CheckBoxGoals(checkList = list, taskViewModel = taskViewModel){id->
+                    navController.navigate("${NavigationGraph.TaskScreen.name}/$id")
+                }
             }
         }
     }
 }
 
 @Composable
-fun CheckBoxGoals(checkList:List<ToggleableInfo>,taskViewModel: TaskViewModel) {
+fun CheckBoxGoals(checkList:List<ToggleableInfo>,taskViewModel: TaskViewModel,onRowClicked:(Int)->Unit) {
     val scope = rememberCoroutineScope()
     Column(
         modifier = Modifier
@@ -106,7 +108,7 @@ fun CheckBoxGoals(checkList:List<ToggleableInfo>,taskViewModel: TaskViewModel) {
             .padding(horizontal = 10.dp, vertical = 9.dp)) {
         checkList.forEachIndexed { index, toggleableInfo ->
                 Row(
-                    modifier = Modifier.padding(top = 5.dp, start = 14.dp),
+                    modifier = Modifier.padding(top = 5.dp, start = 14.dp).clickable{onRowClicked(toggleableInfo.id)},
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
@@ -136,7 +138,11 @@ fun CheckBoxGoals(checkList:List<ToggleableInfo>,taskViewModel: TaskViewModel) {
                     Row(
                         modifier=Modifier.fillMaxWidth().padding(end = 14.dp),
                         horizontalArrangement = Arrangement.End) {
-                        Icon(imageVector = calculateIcon(toggleableInfo.categoryTask), contentDescription = "Task Icon")
+                        Icon(
+                            imageVector = calculateIcon(toggleableInfo.categoryTask),
+                            contentDescription = "Task Icon",
+                            tint = Color.White.copy(alpha = 0.7f)
+                        )
                     }
                 }
             }

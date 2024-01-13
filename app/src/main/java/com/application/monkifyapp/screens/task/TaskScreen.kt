@@ -45,10 +45,13 @@ import com.application.monkifyapp.common.*
 import com.application.monkifyapp.domain.model.ToggleableInfo
 import com.application.monkifyapp.screens.home.components.Title
 import com.application.monkifyapp.ui.theme.Cyan
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 @Composable
-fun TaskScreen(navController: NavController,taskViewModel: TaskViewModel= hiltViewModel()) {
+fun TaskScreen(navController: NavController,id:Int,taskViewModel: TaskViewModel= hiltViewModel()) {
     val context = LocalContext.current
     var descriptionText by remember {
         mutableStateOf("")
@@ -56,7 +59,17 @@ fun TaskScreen(navController: NavController,taskViewModel: TaskViewModel= hiltVi
     var categoryText by remember {
         mutableStateOf("Choose...")
     }
+
     val scope = rememberCoroutineScope()
+    if(id>0){
+        LaunchedEffect(id) {
+            val task= taskViewModel.getInfoById(id)
+            descriptionText=task.descriptionText
+            categoryText=task.categoryTask
+        }
+    }
+
+
     TaskScaffold(navController = navController) {
         Column( modifier = Modifier
             .fillMaxSize()
@@ -68,7 +81,7 @@ fun TaskScreen(navController: NavController,taskViewModel: TaskViewModel= hiltVi
                 modifier=Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Title(title ="Add new task")
+                Title(title ="Add new task $id")
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
                 TaskTextFieldInput(
                     nameValue = descriptionText,
@@ -244,8 +257,12 @@ fun DropDownTaskMenu(categoryText1:String,categoryText:(String)->Unit) {
     var isExpanded by remember {
         mutableStateOf(false)
     }
-    var menuText by remember {
+    var menuText by remember(categoryText1) {
         mutableStateOf(categoryText1)
+    }
+
+    LaunchedEffect(categoryText1) {
+        menuText = categoryText1
     }
     Column(modifier = Modifier.fillMaxWidth()) {
         TaskScreenTitle(text = "Category")
@@ -311,5 +328,5 @@ fun TaskScreenTitle(text:String) {
 @Composable
 @Preview
 fun TaskScreenPreview() {
-    TaskScreen(navController = rememberNavController())
+    TaskScreen(navController = rememberNavController(),id=0)
 }
