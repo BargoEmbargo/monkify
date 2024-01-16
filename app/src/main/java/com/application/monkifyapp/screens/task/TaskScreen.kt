@@ -99,13 +99,20 @@ fun TaskScreen(navController: NavController,id:Int,taskViewModel: TaskViewModel=
                     TaskButton(onAddClick = {
                             if(descriptionText.isNotEmpty() && categoryText!="Choose..."){
                                 scope.launch {
-                                    taskViewModel.upsertInfo(ToggleableInfo(descriptionText=descriptionText, categoryTask = categoryText))
-                                    customToastMessage(context = context, message ="Task added" )
+                                    if(id>0){
+                                        taskViewModel.upsertInfo(ToggleableInfo(id=id,descriptionText=descriptionText, categoryTask = categoryText))
+                                        customToastMessage(context = context, message ="Task updated" )
+                                    }
+                                    else{
+                                        taskViewModel.upsertInfo(ToggleableInfo(descriptionText=descriptionText, categoryTask = categoryText))
+                                        customToastMessage(context = context, message ="Task added" )
+                                    }
+
                                     descriptionText=""
 
                                 }
                             }else{
-                                customToastMessage(context = context, message ="Please add a description for the task" )
+                                customToastMessage(context = context, message ="Please add a description and category for the task" )
                             }
 
                     }, onDeleteClick = {

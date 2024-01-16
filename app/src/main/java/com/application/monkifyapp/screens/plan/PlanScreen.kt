@@ -108,7 +108,9 @@ fun CheckBoxGoals(checkList:List<ToggleableInfo>,taskViewModel: TaskViewModel,on
             .padding(horizontal = 10.dp, vertical = 9.dp)) {
         checkList.forEachIndexed { index, toggleableInfo ->
                 Row(
-                    modifier = Modifier.padding(top = 5.dp, start = 14.dp).clickable{onRowClicked(toggleableInfo.id)},
+                    modifier = Modifier
+                        .padding(top = 5.dp, start = 14.dp)
+                        .clickable { onRowClicked(toggleableInfo.id) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
@@ -132,13 +134,15 @@ fun CheckBoxGoals(checkList:List<ToggleableInfo>,taskViewModel: TaskViewModel,on
                     Text(
                         text = toggleableInfo.descriptionText,
                         fontSize = 16.sp,
-                        color=Color.White
-
+                        color=Color.White,
                     )
                     Row(
-                        modifier=Modifier.fillMaxWidth().padding(end = 14.dp),
+                        modifier= Modifier
+                            .fillMaxWidth()
+                            .padding(end = 14.dp),
                         horizontalArrangement = Arrangement.End) {
                         Icon(
+                            modifier=Modifier.size(24.dp),
                             imageVector = calculateIcon(toggleableInfo.categoryTask),
                             contentDescription = "Task Icon",
                             tint = Color.White.copy(alpha = 0.7f)
