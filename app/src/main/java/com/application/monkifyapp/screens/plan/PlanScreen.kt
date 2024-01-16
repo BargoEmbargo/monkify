@@ -136,7 +136,7 @@ fun CheckBoxGoals(checkList:List<ToggleableInfo>,taskViewModel: TaskViewModel,on
                 Text(
                     modifier = Modifier
                         .weight(1f) // This will make the text take up the available space
-                        .padding(end = 8.dp), // Adjust the padding as needed
+                        .padding(end = 14.dp), // Adjust the padding as needed
                     text = toggleableInfo.descriptionText,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
