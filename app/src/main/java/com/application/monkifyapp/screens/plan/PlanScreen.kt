@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -107,21 +108,21 @@ fun CheckBoxGoals(checkList:List<ToggleableInfo>,taskViewModel: TaskViewModel,on
             .fillMaxSize()
             .padding(horizontal = 10.dp, vertical = 9.dp)) {
         checkList.forEachIndexed { index, toggleableInfo ->
-                Row(
-                    modifier = Modifier
-                        .padding(top = 5.dp, start = 14.dp)
-                        .clickable { onRowClicked(toggleableInfo.id) },
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "${index+1}.",
-                        color=Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Checkbox(
-                        colors=CheckboxDefaults.colors(Cyan),
-                        checked = toggleableInfo.isChecked,
-                        onCheckedChange = {
+            Row(
+                modifier = Modifier
+                    .padding(top = 5.dp, start = 14.dp,end=14.dp)
+                    .clickable { onRowClicked(toggleableInfo.id) },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "${index + 1}.",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+                )
+                Checkbox(
+                    colors = CheckboxDefaults.colors(Cyan),
+                    checked = toggleableInfo.isChecked,
+                    onCheckedChange = {
                         scope.launch {
                             val updatedList = checkList.toMutableList()
                             updatedList[index] = toggleableInfo.copy(isChecked = it)
@@ -130,26 +131,27 @@ fun CheckBoxGoals(checkList:List<ToggleableInfo>,taskViewModel: TaskViewModel,on
                             taskViewModel.updateInfoList(updatedList)
                             taskViewModel.upsertInfo(toggleableInfo.copy(isChecked = it))
                         }
-                    })
-                    Text(
-                        text = toggleableInfo.descriptionText,
-                        fontSize = 16.sp,
-                        color=Color.White,
-                    )
-                    Row(
-                        modifier= Modifier
-                            .fillMaxWidth()
-                            .padding(end = 14.dp),
-                        horizontalArrangement = Arrangement.End) {
-                        Icon(
-                            modifier=Modifier.size(24.dp),
-                            imageVector = calculateIcon(toggleableInfo.categoryTask),
-                            contentDescription = "Task Icon",
-                            tint = Color.White.copy(alpha = 0.7f)
-                        )
                     }
-                }
+                )
+                Text(
+                    modifier = Modifier
+                        .weight(1f) // This will make the text take up the available space
+                        .padding(end = 8.dp), // Adjust the padding as needed
+                    text = toggleableInfo.descriptionText,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    fontSize = 16.sp,
+                    color = Color.White,
+                )
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    imageVector = calculateIcon(toggleableInfo.categoryTask),
+                    contentDescription = "Task Icon",
+                    tint = Color.White.copy(alpha = 0.7f)
+                )
             }
+
+        }
     }
 }
 

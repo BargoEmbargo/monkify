@@ -116,19 +116,18 @@ fun TaskScreen(navController: NavController,id:Int,taskViewModel: TaskViewModel=
                             }
 
                     }, onDeleteClick = {
-
                         scope.launch {
                             val task=taskViewModel.getInfoById(id = id)
                             if(id>0){
                                 taskViewModel.deleteInfo(task)
                                 customToastMessage(context = context, message ="Task Deleted" )
+                                navController.popBackStack()
                             }else{
                                 taskViewModel.deleteAllInfo()
                                 taskViewModel.updateInfoList(emptyList())
                                 customToastMessage(context = context, message ="All Tasks Deleted" )
+                                navController.popBackStack()
                             }
-
-
                         }
                     })
                 }
