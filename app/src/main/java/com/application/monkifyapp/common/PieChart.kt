@@ -48,7 +48,7 @@ fun PieChart(
     // so that each data will get a color
     val colors = listOf(
         Color.White.copy(alpha = 0.7f),
-        Color.Cyan
+        Cyan
     )
 
     var animationPlayed by remember { mutableStateOf(false) }

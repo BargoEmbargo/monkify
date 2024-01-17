@@ -40,6 +40,7 @@ import androidx.room.util.appendPlaceholders
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.application.monkify.screens.plan.calculateIcon
 import com.application.monkifyapp.R
 import com.application.monkifyapp.common.*
 import com.application.monkifyapp.domain.model.ToggleableInfo
@@ -296,7 +297,17 @@ fun DropDownTaskMenu(categoryText1:String,categoryText:(String)->Unit) {
                 value = menuText,
                 onValueChange = {},
                 readOnly = true,
-                trailingIcon = {ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)},
+                trailingIcon = {
+                    Row() {
+                        if(menuText!="Choose...")
+                        Icon(
+                            imageVector = calculateIcon(menuText),
+                            contentDescription = "",
+                            modifier=Modifier.padding(end = 14.dp)
+                        )
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
+                    }
+                               },
                 colors = ExposedDropdownMenuDefaults.textFieldColors(containerColor = Cyan, textColor = Color.White, unfocusedIndicatorColor = Color.White, focusedIndicatorColor = Color.White, unfocusedTrailingIconColor = Color.White, focusedTrailingIconColor = Color.White),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -308,6 +319,13 @@ fun DropDownTaskMenu(categoryText1:String,categoryText:(String)->Unit) {
                 onDismissRequest = { isExpanded=false}) {
                 DropdownMenuItem(
                     colors = MenuDefaults.itemColors(textColor = Color.White),
+                    trailingIcon = {
+                        Icon(
+                            imageVector = calculateIcon(CategoryTask.Exercise.title),
+                            tint = Color.White,
+                            contentDescription = "",
+                            modifier=Modifier.padding(end = 14.dp)
+                        )},
                     text = {  Text(text = CategoryTask.Exercise.title) },
                     onClick = {
                         menuText=CategoryTask.Exercise.title
@@ -316,6 +334,13 @@ fun DropDownTaskMenu(categoryText1:String,categoryText:(String)->Unit) {
                 )
                 DropdownMenuItem(
                     colors = MenuDefaults.itemColors(textColor = Color.White),
+                    trailingIcon = {
+                        Icon(
+                            imageVector = calculateIcon(CategoryTask.Stydying.title),
+                            tint = Color.White,
+                            contentDescription = "",
+                            modifier=Modifier.padding(end = 14.dp)
+                        )},
                     text = { Text(text = CategoryTask.Stydying.title) },
                     onClick = {
                         menuText= CategoryTask.Stydying.title
@@ -324,6 +349,13 @@ fun DropDownTaskMenu(categoryText1:String,categoryText:(String)->Unit) {
                 )
                 DropdownMenuItem(
                     colors = MenuDefaults.itemColors(textColor = Color.White),
+                    trailingIcon = {
+                        Icon(
+                            imageVector = calculateIcon(CategoryTask.Other.title),
+                            tint = Color.White,
+                            contentDescription = "",
+                            modifier=Modifier.padding(end = 14.dp)
+                        )},
                     text = {  Text(CategoryTask.Other.title) },
                     onClick = {
                         menuText= CategoryTask.Other.title
