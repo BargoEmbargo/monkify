@@ -70,7 +70,7 @@ fun PlanScreen(
                     PieChart(
                         data = mapOf(
                             Pair("Sample-1", 100),
-                            Pair("Sample-2", 30),
+                            Pair("Sample-2", 60),
                         )
                     )
                 }

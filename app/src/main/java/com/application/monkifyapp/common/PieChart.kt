@@ -14,15 +14,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.application.monkifyapp.ui.theme.Cyan
+import java.lang.Math.cos
+import java.lang.Math.sin
 
 @Composable
 fun PieChart(
@@ -42,16 +44,14 @@ fun PieChart(
         floatValue.add(index, 360 * values.toFloat() / totalSum.toFloat())
     }
 
-    // add the colors as per the number of data(no. of pie chart entries)
+    // add the colors as per the number of data (no. of pie chart entries)
     // so that each data will get a color
     val colors = listOf(
         Color.White.copy(alpha = 0.7f),
-        Cyan
+        Color.Cyan
     )
 
     var animationPlayed by remember { mutableStateOf(false) }
-
-    var lastValue = 0f
 
     // it is the diameter value of the Pie
     val animateSize by animateFloatAsState(
@@ -86,7 +86,6 @@ fun PieChart(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         // Details Pie Chart
         DetailsPieChart(
             data = data,
@@ -104,6 +103,7 @@ fun PieChart(
                     .size(radiusOuter * 2f)
                     .rotate(animateRotation)
             ) {
+                var lastValue = 0f
                 // draw each Arc for each data entry in Pie Chart
                 floatValue.forEachIndexed { index, value ->
                     drawArc(
@@ -115,10 +115,30 @@ fun PieChart(
                     )
                     lastValue += value
                 }
+
+                // Draw percentage text in the center
+                val centerText = "${(data.values.toList()[0] * 100 / totalSum)}%"
+                drawIntoCanvas { canvas ->
+                    val textPaint = androidx.compose.ui.graphics.Paint().asFrameworkPaint().apply {
+                        color = Color.White.toArgb()
+                        textSize = 20.dp.toPx()
+                        textAlign = android.graphics.Paint.Align.CENTER
+                    }
+                    val textBaselineOffset =
+                        (size.height / 2) - (textPaint.fontMetrics.ascent + textPaint.fontMetrics.descent) / 2
+                    canvas.nativeCanvas.drawText(
+                        centerText,
+                        size.width / 2,
+                        textBaselineOffset,
+                        textPaint
+                    )
+                }
             }
         }
     }
 }
+
+
 
 @Composable
 fun DetailsPieChart(
