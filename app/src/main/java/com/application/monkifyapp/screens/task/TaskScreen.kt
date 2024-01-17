@@ -59,11 +59,15 @@ fun TaskScreen(navController: NavController,id:Int,taskViewModel: TaskViewModel=
     var categoryText by remember {
         mutableStateOf("Choose...")
     }
+    var isSelectedItem by remember{
+        mutableStateOf(false)
+    }
 
     val scope = rememberCoroutineScope()
     if(id>0){
         LaunchedEffect(id) {
             val task= taskViewModel.getInfoById(id)
+            isSelectedItem=true
             descriptionText=task.descriptionText
             categoryText=task.categoryTask
         }
@@ -81,7 +85,7 @@ fun TaskScreen(navController: NavController,id:Int,taskViewModel: TaskViewModel=
                 modifier=Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Title(title ="Add new task $id")
+                Title(title =if(isSelectedItem)"Update Task" else{"Add New Task"})
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
                 TaskTextFieldInput(
                     nameValue = descriptionText,
@@ -96,7 +100,9 @@ fun TaskScreen(navController: NavController,id:Int,taskViewModel: TaskViewModel=
                     modifier=Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Bottom
                 ) {
-                    TaskButton(onAddClick = {
+                    TaskButton(
+                        isSelectedItem=isSelectedItem,
+                        onAddClick = {
                             if(descriptionText.isNotEmpty() && categoryText!="Choose..."){
                                 scope.launch {
                                     if(id>0){
@@ -207,8 +213,8 @@ fun TaskTextFieldInput(nameValue: String = "", onNameChange: (value: String) -> 
                         )
                     }
                     .padding(8.dp),
-                singleLine = true,
-                maxLines = 1
+//                singleLine = true,
+                maxLines = 2
             )
 
             if (nameValue.isEmpty()) {
@@ -226,7 +232,7 @@ fun TaskTextFieldInput(nameValue: String = "", onNameChange: (value: String) -> 
 
 
 @Composable
-fun TaskButton(onAddClick:()->Unit,onDeleteClick:()->Unit) {
+fun TaskButton(onAddClick:()->Unit,onDeleteClick:()->Unit,isSelectedItem:Boolean) {
     Row(
 
     ) {
@@ -239,7 +245,7 @@ fun TaskButton(onAddClick:()->Unit,onDeleteClick:()->Unit) {
             onClick = {onAddClick()}
         ) {
             Text(
-                text = "Add",
+                text = if(isSelectedItem)"Update" else{"Add"},
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
             )
@@ -256,7 +262,7 @@ fun TaskButton(onAddClick:()->Unit,onDeleteClick:()->Unit) {
             onClick = {onDeleteClick()}
         ) {
             Text(
-                text = "Delete",
+                text = if(isSelectedItem)"Delete" else{"Delete All"},
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
             )
