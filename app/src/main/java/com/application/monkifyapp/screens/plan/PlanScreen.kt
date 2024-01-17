@@ -32,6 +32,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.application.monkifyapp.common.MainScaffold
+import com.application.monkifyapp.common.PieChart
 import com.application.monkifyapp.data.local.ToggleableInfoDao
 import com.application.monkifyapp.domain.model.AchievementEmojis
 import com.application.monkifyapp.domain.model.ToggleableInfo
@@ -60,27 +61,18 @@ fun PlanScreen(
                 .padding(24.dp)
         ) {
             Title("Here is your plan:")
-            GlassmorpismCard(size = 140.dp) {
+            GlassmorpismCard(size = 135.dp) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(horizontal = 24.dp, vertical = 14.dp)
                 ) {
-                   Row(
-                       modifier=Modifier.fillMaxWidth(),
-                       verticalAlignment = Alignment.CenterVertically,
-                   ) {
-                       Column {
-                           PlanTitle("Achievement")
-                           Column() {
-                               AchievementText(text = "Mad", color = Cyan)
-                               Spacer(modifier = Modifier.height(10.dp))
-                               AchievementText(text = list.size.toString(), color = Color.White.copy(alpha = 0.6f))
-                           }
-                       }
-                       Spacer(modifier = Modifier.weight(1f))
-                       LoopingLottieAnimation(animationResId = chooseAchievementEmoji(2))
-                   }
+                    PieChart(
+                        data = mapOf(
+                            Pair("Sample-1", 100),
+                            Pair("Sample-2", 30),
+                        )
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
@@ -91,6 +83,7 @@ fun PlanScreen(
                     navController.navigate("${NavigationGraph.TaskScreen.name}/-1")
                 }
             }
+            Spacer(modifier = Modifier.height(4.dp))
             GlassmorpismCard(size = 270.dp) {
                 CheckBoxGoals(checkList = list, taskViewModel = taskViewModel){id->
                     navController.navigate("${NavigationGraph.TaskScreen.name}/$id")
@@ -110,7 +103,7 @@ fun CheckBoxGoals(checkList:List<ToggleableInfo>,taskViewModel: TaskViewModel,on
         checkList.forEachIndexed { index, toggleableInfo ->
             Row(
                 modifier = Modifier
-                    .padding(top = 5.dp, start = 14.dp,end=14.dp)
+                    .padding(top = 5.dp, start = 14.dp, end = 14.dp)
                     .clickable { onRowClicked(toggleableInfo.id) },
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -169,7 +162,7 @@ fun calculateIcon(categoryName:String):ImageVector{
 fun SetupText(setUpFunction:()->Unit) {
     Text(
         modifier= Modifier
-            .padding(end = 10.dp, bottom = 10.dp)
+            .padding( bottom = 10.dp)
             .clickable {
                 setUpFunction()
             },

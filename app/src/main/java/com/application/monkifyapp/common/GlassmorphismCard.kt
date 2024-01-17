@@ -25,7 +25,7 @@ fun GlassmorpismCard(
     size: Dp,
     content: @Composable () -> Unit
 ) {
-    val borderColors = remember { listOf(Color.White.copy(alpha = 0.3f), Color.White.copy(alpha = 0.75f)) }
+    val borderColors = remember { listOf(Color.White.copy(alpha = 0.2f), Color.White.copy(alpha = 0.85f)) }
     val animationDuration = 2000
 
     var currentColorIndex by remember { mutableStateOf(0) }
