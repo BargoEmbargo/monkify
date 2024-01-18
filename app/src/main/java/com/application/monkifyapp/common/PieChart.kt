@@ -23,8 +23,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.application.monkifyapp.ui.theme.Cyan
-import java.lang.Math.cos
-import java.lang.Math.sin
 
 @Composable
 fun PieChart(
@@ -117,7 +115,7 @@ fun PieChart(
                 }
 
                 // Draw percentage text in the center
-                val centerText = "${(data.values.toList()[0] * 100 / totalSum)}%"
+                val centerText = "${(data.values.toList()[1] * 100 / totalSum)}%"
                 drawIntoCanvas { canvas ->
                     val textPaint = androidx.compose.ui.graphics.Paint().asFrameworkPaint().apply {
                         color = Color.White.toArgb()
@@ -137,6 +135,8 @@ fun PieChart(
         }
     }
 }
+
+
 
 
 
@@ -168,7 +168,7 @@ fun DetailsPieChartItem(
 
     Surface(
         modifier = Modifier
-            .padding(vertical = 1.dp, horizontal = 4.dp),
+            .padding(vertical = 10.dp, horizontal = 4.dp),
         color = Color.Transparent
     ) {
 
@@ -192,14 +192,7 @@ fun DetailsPieChartItem(
                     text = data.first,
                     fontWeight = FontWeight.Medium,
                     fontSize = 16.sp,
-                    color = Color.Black
-                )
-                Text(
-                    modifier = Modifier.padding(start = 15.dp),
-                    text = data.second.toString(),
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 14.sp,
-                    color = Color.Gray
+                    color = Color.White
                 )
             }
 

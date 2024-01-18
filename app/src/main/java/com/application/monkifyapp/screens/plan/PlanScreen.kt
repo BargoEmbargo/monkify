@@ -9,10 +9,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,8 +48,10 @@ fun PlanScreen(
     selectedTab:Int,
     onTabSelected: (Int) -> Unit
 ) {
-    val list = taskViewModel.infoList.collectAsState().value
 
+    val list = taskViewModel.infoList.collectAsState().value
+    val completedTasks = list.count { it.isChecked }
+    val inCompletedTasks = list.size - completedTasks
     MainScaffold(navController = navController,selectedTab,onTabSelected =onTabSelected) {
         Column(
             modifier = Modifier
@@ -69,8 +68,8 @@ fun PlanScreen(
                 ) {
                     PieChart(
                         data = mapOf(
-                            Pair("Sample-1", 100),
-                            Pair("Sample-2", 60),
+                            Pair("Tasks Left: $inCompletedTasks", inCompletedTasks),
+                            Pair("Tasks finished: $completedTasks", completedTasks),
                         )
                     )
                 }
