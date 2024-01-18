@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -41,13 +42,27 @@ fun PieChart(
     data.values.forEachIndexed { index, values ->
         floatValue.add(index, 360 * values.toFloat() / totalSum.toFloat())
     }
-
-    // add the colors as per the number of data (no. of pie chart entries)
-    // so that each data will get a color
     val colors = listOf(
         Color.White.copy(alpha = 0.7f),
         Cyan
     )
+// Example gradient for the second segment
+    val gradient1 = Brush.linearGradient(
+        colors = listOf(Color.White,Color.Gray.copy(alpha = 0.9f)),
+        start = Offset(100f, 0f),
+        end = Offset(50f, 300f)
+    )
+    // Example gradient for the first segment
+    val gradient2 = Brush.linearGradient(
+        colors = listOf(Cyan, Color.Black.copy(alpha=0.6f)),
+        start = Offset(100f, 20f),
+        end = Offset(10f, 300f)
+    )
+
+
+
+    // Replace the colors list with the gradients
+    val gradients = listOf(gradient1, gradient2)
 
     var animationPlayed by remember { mutableStateOf(false) }
 
@@ -87,7 +102,7 @@ fun PieChart(
         // Details Pie Chart
         DetailsPieChart(
             data = data,
-            colors = colors,
+            colors = colors, // Use the gradients here
             modifier = Modifier.weight(1f) // This makes the DetailsPieChart take the remaining width
         )
 
@@ -105,9 +120,9 @@ fun PieChart(
                 // draw each Arc for each data entry in Pie Chart
                 floatValue.forEachIndexed { index, value ->
                     drawArc(
-                        color = colors[index],
-                        lastValue,
-                        value,
+                        brush = gradients[index], // Use the gradient for each segment
+                        startAngle = lastValue,
+                        sweepAngle = value,
                         useCenter = false,
                         style = Stroke(chartBarWidth.toPx(), cap = StrokeCap.Butt)
                     )
