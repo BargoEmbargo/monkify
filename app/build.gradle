@@ -93,6 +93,9 @@ dependencies {
     //Lottie files
     implementation "com.airbnb.android:lottie-compose:6.0.0"
 
+    //Material 3 icons extended
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+
 
 
 

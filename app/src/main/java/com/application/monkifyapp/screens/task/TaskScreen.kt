@@ -273,6 +273,7 @@ fun TaskButton(onAddClick:()->Unit,onDeleteClick:()->Unit,isSelectedItem:Boolean
     }
 }
 
+@SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropDownTaskMenu(categoryText1:String,categoryText:(String)->Unit) {
@@ -317,54 +318,59 @@ fun DropDownTaskMenu(categoryText1:String,categoryText:(String)->Unit) {
                 modifier=Modifier.background(Cyan),
                 expanded = isExpanded,
                 onDismissRequest = { isExpanded=false}) {
-                DropdownMenuItem(
-                    colors = MenuDefaults.itemColors(textColor = Color.White),
-                    trailingIcon = {
-                        Icon(
-                            imageVector = calculateIcon(CategoryTask.Exercise.title),
-                            tint = Color.White,
-                            contentDescription = "",
-                            modifier=Modifier.padding(end = 14.dp)
-                        )},
-                    text = {  Text(text = CategoryTask.Exercise.title) },
-                    onClick = {
-                        menuText=CategoryTask.Exercise.title
-                        categoryText(menuText)
-                        isExpanded=false }
-                )
-                DropdownMenuItem(
-                    colors = MenuDefaults.itemColors(textColor = Color.White),
-                    trailingIcon = {
-                        Icon(
-                            imageVector = calculateIcon(CategoryTask.Stydying.title),
-                            tint = Color.White,
-                            contentDescription = "",
-                            modifier=Modifier.padding(end = 14.dp)
-                        )},
-                    text = { Text(text = CategoryTask.Stydying.title) },
-                    onClick = {
-                        menuText= CategoryTask.Stydying.title
-                        categoryText(menuText)
-                        isExpanded=false }
-                )
-                DropdownMenuItem(
-                    colors = MenuDefaults.itemColors(textColor = Color.White),
-                    trailingIcon = {
-                        Icon(
-                            imageVector = calculateIcon(CategoryTask.Other.title),
-                            tint = Color.White,
-                            contentDescription = "",
-                            modifier=Modifier.padding(end = 14.dp)
-                        )},
-                    text = {  Text(CategoryTask.Other.title) },
-                    onClick = {
-                        menuText= CategoryTask.Other.title
-                        categoryText(menuText)
-                        isExpanded=false }
-                )
+                CustomDropDownItem(imageVector = CategoryTask.Exercise.icon, text = CategoryTask.Exercise.title ) {
+                    menuText=CategoryTask.Exercise.title
+                    categoryText(menuText)
+                    isExpanded=false
+                }
+                CustomDropDownItem(imageVector = CategoryTask.Stydying.icon, text = CategoryTask.Stydying.title  ) {
+                    menuText=CategoryTask.Stydying.title
+                    categoryText(menuText)
+                    isExpanded=false
+                }
+                CustomDropDownItem(imageVector = CategoryTask.RidingBike.icon, text = CategoryTask.RidingBike.title  ) {
+                    menuText=CategoryTask.RidingBike.title
+                    categoryText(menuText)
+                    isExpanded=false
+                }
+                CustomDropDownItem(imageVector = CategoryTask.PhoneLocked.icon, text = CategoryTask.PhoneLocked.title  ) {
+                    menuText=CategoryTask.PhoneLocked.title
+                    categoryText(menuText)
+                    isExpanded=false
+                }
+                CustomDropDownItem(imageVector = CategoryTask.Meditating.icon, text = CategoryTask.Meditating.title  ) {
+                    menuText=CategoryTask.Meditating.title
+                    categoryText(menuText)
+                    isExpanded=false
+                }
+                CustomDropDownItem(imageVector = CategoryTask.Other.icon, text = CategoryTask.Other.title  ) {
+                    menuText=CategoryTask.Other.title
+                    categoryText(menuText)
+                    isExpanded=false
+                }
+
+
             }
         }
     }
+}
+
+@Composable
+fun CustomDropDownItem(imageVector: ImageVector,text:String,onClick:()->Unit) {
+    DropdownMenuItem(
+        colors = MenuDefaults.itemColors(textColor = Color.White),
+        trailingIcon = {
+            Icon(
+                imageVector = imageVector,
+                tint = Color.White,
+                contentDescription = "",
+                modifier=Modifier.padding(end = 14.dp)
+            )},
+        text = {  Text(text = text) },
+        onClick = {
+            onClick()
+        }
+    )
 }
 
 @Composable

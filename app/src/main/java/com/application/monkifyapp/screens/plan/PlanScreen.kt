@@ -66,12 +66,18 @@ fun PlanScreen(
                         .fillMaxSize()
                         .padding(horizontal = 24.dp, vertical = 14.dp)
                 ) {
-                    PieChart(
-                        data = mapOf(
-                            Pair("Tasks Left: $inCompletedTasks", inCompletedTasks),
-                            Pair("Tasks finished: $completedTasks", completedTasks),
+                    if(list.isNotEmpty()){
+                        PieChart(
+                            data = mapOf(
+                                Pair("Tasks Left: $inCompletedTasks", inCompletedTasks),
+                                Pair("Tasks finished: $completedTasks", completedTasks),
+                            )
                         )
-                    )
+                    }
+                    else{
+                        Text(text = "LOLE")
+                    }
+                    
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
@@ -152,6 +158,11 @@ fun calculateIcon(categoryName:String):ImageVector{
         CategoryTask.Exercise.title->CategoryTask.Exercise.icon
         CategoryTask.Stydying.title->CategoryTask.Stydying.icon
         CategoryTask.Reading.title->CategoryTask.Reading.icon
+        CategoryTask.PhoneLocked.title->CategoryTask.PhoneLocked.icon
+        CategoryTask.Meditating.title->CategoryTask.Meditating.icon
+        CategoryTask.RidingBike.title->CategoryTask.RidingBike.icon
+        CategoryTask.SkinCare.title->CategoryTask.SkinCare.icon
+        CategoryTask.Running.title->CategoryTask.Running.icon
         CategoryTask.Other.title->CategoryTask.Other.icon
         else -> CategoryTask.Exercise.icon
     }
@@ -161,7 +172,7 @@ fun calculateIcon(categoryName:String):ImageVector{
 fun SetupText(setUpFunction:()->Unit) {
     Text(
         modifier= Modifier
-            .padding( bottom = 10.dp)
+            .padding(bottom = 10.dp)
             .clickable {
                 setUpFunction()
             },

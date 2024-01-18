@@ -28,8 +28,8 @@ import com.application.monkifyapp.ui.theme.Cyan
 @Composable
 fun PieChart(
     data: Map<String, Int>,
-    radiusOuter: Dp = 40.dp,
-    chartBarWidth: Dp = 12.dp,
+    radiusOuter: Dp = 45.dp,
+    chartBarWidth: Dp = 11.dp,
     animDuration: Int = 1000,
 ) {
     val totalSum = data.values.sum()
