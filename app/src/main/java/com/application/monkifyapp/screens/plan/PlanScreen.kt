@@ -36,6 +36,7 @@ import com.application.monkifyapp.domain.model.ToggleableInfo
 import com.application.monkifyapp.navigation.NavigationGraph
 import com.application.monkifyapp.screens.home.components.GlassmorpismCard
 import com.application.monkifyapp.screens.home.components.Title
+import com.application.monkifyapp.screens.plan.viewmodel.PlanViewModel
 import com.application.monkifyapp.screens.task.CategoryTask
 import com.application.monkifyapp.screens.task.TaskViewModel
 import com.application.monkifyapp.ui.theme.Cyan
@@ -45,12 +46,12 @@ import java.time.*
 @Composable
 fun PlanScreen(
     navController:NavController,
-    taskViewModel:TaskViewModel = hiltViewModel(),
+    planViewModel: PlanViewModel = hiltViewModel(),
     selectedTab:Int,
     onTabSelected: (Int) -> Unit
 ) {
 
-    val list = taskViewModel.infoList.collectAsState().value
+    val list = planViewModel.infoList.collectAsState().value
     val completedTasks = list.count { it.isChecked }
     val inCompletedTasks = list.size - completedTasks
     val scope = rememberCoroutineScope()
@@ -75,9 +76,9 @@ fun PlanScreen(
                 list.forEachIndexed { index, toggleableInfo ->
                     val updatedList = list.toMutableList()
                     updatedList[index] = toggleableInfo.copy(isChecked = false)
-                    taskViewModel.updateInfoList(updatedList)
+                    planViewModel.updateInfoList(updatedList)
                     scope.launch {
-                        taskViewModel.upsertInfo(toggleableInfo.copy(isChecked = false))
+                        planViewModel.upsertInfo(toggleableInfo.copy(isChecked = false))
                     }
                 }
                 isDayCompleted = false
@@ -131,7 +132,7 @@ fun PlanScreen(
             }
             Spacer(modifier = Modifier.height(4.dp))
             GlassmorpismCard(size = 270.dp) {
-                CheckBoxGoals(checkList = list, taskViewModel = taskViewModel){id->
+                CheckBoxGoals(checkList = list, planViewModel = planViewModel){id->
                     navController.navigate("${NavigationGraph.TaskScreen.name}/$id")
                 }
             }
@@ -139,9 +140,8 @@ fun PlanScreen(
     }
 }
 
-
 @Composable
-fun CheckBoxGoals(checkList:List<ToggleableInfo>,taskViewModel: TaskViewModel,onRowClicked:(Int)->Unit) {
+fun CheckBoxGoals(checkList:List<ToggleableInfo>,planViewModel: PlanViewModel,onRowClicked:(Int)->Unit) {
     val scope = rememberCoroutineScope()
     Column(
         modifier = Modifier
@@ -168,8 +168,8 @@ fun CheckBoxGoals(checkList:List<ToggleableInfo>,taskViewModel: TaskViewModel,on
                             updatedList[index] = toggleableInfo.copy(isChecked = it)
                             // Update the state using the viewModel
                             println(toggleableInfo.id)
-                            taskViewModel.updateInfoList(updatedList)
-                            taskViewModel.upsertInfo(toggleableInfo.copy(isChecked = it))
+                            planViewModel.updateInfoList(updatedList)
+                            planViewModel.upsertInfo(toggleableInfo.copy(isChecked = it))
                         }
                     }
                 )
@@ -285,6 +285,6 @@ fun chooseAchievementEmoji(value :Int) : Int {
 @Preview
 @Composable
 fun PlanScreenPreview() {
-    val taskViewModel= androidx.lifecycle.viewmodel.compose.viewModel<TaskViewModel>()
-    PlanScreen(navController = rememberNavController(), selectedTab = 1, onTabSelected = {}, taskViewModel = taskViewModel)
+    val planViewModel= androidx.lifecycle.viewmodel.compose.viewModel<PlanViewModel>()
+    PlanScreen(navController = rememberNavController(), selectedTab = 1, onTabSelected = {}, planViewModel = planViewModel)
 }

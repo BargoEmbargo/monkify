@@ -51,10 +51,4 @@ class TaskViewModel @Inject constructor(private val infoRepository: InfoReposito
     fun updateInfoList(newList: List<ToggleableInfo>) {
         _infoList.value = newList
     }
-    // Add this function to update the isChecked value for all items in the list
-    fun updateIsCheckedForAllItems(isChecked: Boolean) {
-        val updatedList = _infoList.value.map { it.copy(isChecked = isChecked) }
-        _infoList.value = updatedList
-    }
-
 }
