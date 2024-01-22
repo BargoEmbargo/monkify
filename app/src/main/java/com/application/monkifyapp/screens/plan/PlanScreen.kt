@@ -1,6 +1,6 @@
 package com.application.monkify.screens.plan
 
-import android.util.Log
+import android.os.Looper
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -10,6 +10,7 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,17 +31,17 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.application.monkifyapp.common.MainScaffold
 import com.application.monkifyapp.common.PieChart
-import com.application.monkifyapp.data.local.ToggleableInfoDao
 import com.application.monkifyapp.domain.model.AchievementEmojis
 import com.application.monkifyapp.domain.model.ToggleableInfo
 import com.application.monkifyapp.navigation.NavigationGraph
-import com.application.monkifyapp.repository.InfoRepository
 import com.application.monkifyapp.screens.home.components.GlassmorpismCard
 import com.application.monkifyapp.screens.home.components.Title
 import com.application.monkifyapp.screens.task.CategoryTask
 import com.application.monkifyapp.screens.task.TaskViewModel
 import com.application.monkifyapp.ui.theme.Cyan
 import kotlinx.coroutines.launch
+import java.time.*
+
 @Composable
 fun PlanScreen(
     navController:NavController,
@@ -52,6 +53,46 @@ fun PlanScreen(
     val list = taskViewModel.infoList.collectAsState().value
     val completedTasks = list.count { it.isChecked }
     val inCompletedTasks = list.size - completedTasks
+    val scope = rememberCoroutineScope()
+
+    var daysCompleted by rememberSaveable() {
+        mutableStateOf(0)
+    }
+    var isDayCompleted by remember{
+        mutableStateOf(false)
+    }
+    if(list.size==completedTasks && !isDayCompleted){
+        daysCompleted++
+        isDayCompleted=true
+    }
+
+// Schedule a task to reset isDayCompleted every 10 seconds for testing
+    DisposableEffect(Unit) {
+        val handler = android.os.Handler(Looper.getMainLooper())
+        val resetTask = object : Runnable {
+            override fun run() {
+                // Update isChecked for all items in the list
+                list.forEachIndexed { index, toggleableInfo ->
+                    val updatedList = list.toMutableList()
+                    updatedList[index] = toggleableInfo.copy(isChecked = false)
+                    taskViewModel.updateInfoList(updatedList)
+                    scope.launch {
+                        taskViewModel.upsertInfo(toggleableInfo.copy(isChecked = false))
+                    }
+                }
+                isDayCompleted = false
+                handler.postDelayed(this, 50 * 1000) // Repeat every 10 seconds for testing
+                print(isDayCompleted)
+            }
+        }
+
+        handler.postDelayed(resetTask, 50 * 1000) // Initial delay for the first execution
+
+        onDispose {
+            handler.removeCallbacks(resetTask)
+        }
+    }
+
     MainScaffold(navController = navController,selectedTab,onTabSelected =onTabSelected) {
         Column(
             modifier = Modifier
@@ -59,7 +100,7 @@ fun PlanScreen(
                 .statusBarsPadding()
                 .padding(24.dp)
         ) {
-            Title("Here is your plan:")
+            Title("Here is your plan:$daysCompleted")
             GlassmorpismCard(size = 135.dp) {
                 Column(
                     modifier = Modifier
@@ -77,7 +118,7 @@ fun PlanScreen(
                     else{
                         Text(text = "LOLE")
                     }
-                    
+
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
@@ -97,6 +138,7 @@ fun PlanScreen(
         }
     }
 }
+
 
 @Composable
 fun CheckBoxGoals(checkList:List<ToggleableInfo>,taskViewModel: TaskViewModel,onRowClicked:(Int)->Unit) {
@@ -152,6 +194,9 @@ fun CheckBoxGoals(checkList:List<ToggleableInfo>,taskViewModel: TaskViewModel,on
         }
     }
 }
+
+
+
 
 fun calculateIcon(categoryName:String):ImageVector{
     return when(categoryName){
