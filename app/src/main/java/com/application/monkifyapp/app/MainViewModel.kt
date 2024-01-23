@@ -12,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +27,8 @@ class MainViewModel @Inject constructor(
 //    private val _startDestination = mutableStateOf(Route.AppStartNavigation.route)
 //    val startDestination: State<String> = _startDestination
 
+    var daysCompleted by mutableStateOf(-1)
+        private set
 
     var splashCondition by mutableStateOf(true)
     private set
@@ -43,5 +46,12 @@ class MainViewModel @Inject constructor(
             delay(200) //Without this delay, the onBoarding screen will show for a momentum.
             splashCondition = false
         }.launchIn(viewModelScope)
+        viewModelScope.launch {
+            appEntryUseCases.readDaysCompleted.invoke().collect{
+                if (it != null) {
+                   daysCompleted=it
+                }
+            }
+        }
     }
 }

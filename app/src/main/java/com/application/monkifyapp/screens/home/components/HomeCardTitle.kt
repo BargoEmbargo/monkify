@@ -17,11 +17,11 @@ import com.application.monkify.screens.plan.chooseAchievementEmoji
 import com.application.monkifyapp.R
 
 @Composable
-fun HomeCardTitle() {
+fun HomeCardTitle(daysCompleted:String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column() {
             Text(
-                text = "4",
+                text = daysCompleted,
                 modifier = Modifier.padding(start = 24.dp, top = 24.dp),
                 color= Color.White,
                 fontSize=34.sp,

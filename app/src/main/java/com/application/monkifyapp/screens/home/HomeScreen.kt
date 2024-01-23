@@ -18,7 +18,7 @@ import java.time.LocalDate
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SuspiciousIndentation")
 @Composable
-fun HomeScreen(navController: NavController,selectedTab:Int,onTabSelected: (Int) -> Unit,) {
+fun HomeScreen(navController: NavController,daysCompleted:Int,selectedTab:Int,onTabSelected: (Int) -> Unit,) {
     val selectedDateRange = remember {
         val value = Range(LocalDate.now().minusDays(2), LocalDate.now())
         mutableStateOf(value)
@@ -34,7 +34,7 @@ fun HomeScreen(navController: NavController,selectedTab:Int,onTabSelected: (Int)
                Title("Welcome Back!")
                GlassmorpismCard(size=520.dp) {
                    Column {
-                       HomeCardTitle()
+                       HomeCardTitle(daysCompleted = daysCompleted.toString())
                        Calendar(sheetState = sheetState,selectedDateRange=selectedDateRange)
                    }
                }
@@ -46,6 +46,6 @@ fun HomeScreen(navController: NavController,selectedTab:Int,onTabSelected: (Int)
 @Preview
 @Composable
 fun Proba() {
-    HomeScreen(navController = rememberNavController(), selectedTab = 0, onTabSelected ={} )
+    HomeScreen(navController = rememberNavController(), selectedTab = 0, onTabSelected ={} , daysCompleted = 0)
 }
 

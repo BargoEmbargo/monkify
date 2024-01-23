@@ -28,7 +28,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             MonkifyAppTheme {
                 val startDestination=viewModel.startDestination
-              Navigation(startDestination = startDestination)
+                val daysCompleted=viewModel.daysCompleted
+              Navigation(startDestination = startDestination,daysCompleted=daysCompleted)
             }
         }
     }

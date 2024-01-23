@@ -10,14 +10,16 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.application.monkify.screens.home.HomeScreen
 import com.application.monkify.screens.plan.PlanScreen
+import com.application.monkifyapp.domain.useCases.AppEntryUseCases
 import com.application.monkifyapp.screens.onBoarding.BoardingScreen
 import com.application.monkifyapp.screens.onBoarding.viewModel.OnBoardingViewModel
 import com.application.monkifyapp.screens.plan.viewmodel.PlanViewModel
 import com.application.monkifyapp.screens.task.TaskScreen
 import com.application.monkifyapp.screens.task.TaskViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun Navigation(startDestination:String) {
+fun Navigation(startDestination:String,daysCompleted:Int) {
     val navController= rememberNavController()
     val viewModel: OnBoardingViewModel = hiltViewModel()
     var selectedTab by rememberSaveable { mutableStateOf(0) }
@@ -27,7 +29,7 @@ fun Navigation(startDestination:String) {
 
     NavHost(navController = navController, startDestination = startDestination ){
         composable(NavigationGraph.HomeScreen.name){
-            HomeScreen(navController = navController,selectedTab){newTab->
+            HomeScreen(navController = navController,daysCompleted=daysCompleted,selectedTab){newTab->
                 selectedTab=newTab
             }
         }
