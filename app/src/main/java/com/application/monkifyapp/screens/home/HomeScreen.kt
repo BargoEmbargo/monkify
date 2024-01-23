@@ -20,7 +20,7 @@ import java.time.LocalDate
 @Composable
 fun HomeScreen(navController: NavController,daysCompleted:Int,selectedTab:Int,onTabSelected: (Int) -> Unit,) {
     val selectedDateRange = remember {
-        val value = Range(LocalDate.now().minusDays(2), LocalDate.now())
+        val value = Range(LocalDate.now().minusDays(daysCompleted.toLong() -1), LocalDate.now())
         mutableStateOf(value)
     }
     var sheetState = rememberSheetState()
