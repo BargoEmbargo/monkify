@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -102,7 +103,8 @@ fun PlanScreen(
                 .padding(24.dp)
         ) {
             Title("Here is your plan:$daysCompleted")
-            GlassmorpismCard(size = 135.dp) {
+            
+            GlassmorpismCard(size = if(list.isNotEmpty()){135.dp}else{100.dp}) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -117,7 +119,7 @@ fun PlanScreen(
                         )
                     }
                     else{
-                        Text(text = "LOLE")
+                        ifEmptyText(text = "No data...")
                     }
 
                 }
@@ -131,12 +133,37 @@ fun PlanScreen(
                 }
             }
             Spacer(modifier = Modifier.height(4.dp))
-            GlassmorpismCard(size = 270.dp) {
-                CheckBoxGoals(checkList = list, planViewModel = planViewModel){id->
-                    navController.navigate("${NavigationGraph.TaskScreen.name}/$id")
+            GlassmorpismCard(size = calculateCardHeight(itemCount = list.size)) {
+                if(list.isNotEmpty()){
+                    CheckBoxGoals(checkList = list, planViewModel = planViewModel){id->
+                        navController.navigate("${NavigationGraph.TaskScreen.name}/$id")
+                    }
                 }
+                else{
+                    ifEmptyText(text = "Please set up your daily goal")
+                }
+
             }
         }
+    }
+}
+
+@Composable
+fun ifEmptyText(text:String) {
+    Column(modifier=Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = text,
+            color = Color.White.copy(alpha = 0.5f),
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+@Composable
+fun calculateCardHeight(itemCount: Int): Dp {
+    return if(itemCount==0){
+        100.dp
+    }else{
+        (itemCount * 62).dp
     }
 }
 
