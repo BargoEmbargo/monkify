@@ -37,6 +37,8 @@ import com.application.monkifyapp.domain.model.ToggleableInfo
 import com.application.monkifyapp.navigation.NavigationGraph
 import com.application.monkifyapp.screens.home.components.GlassmorpismCard
 import com.application.monkifyapp.screens.home.components.Title
+import com.application.monkifyapp.screens.onBoarding.viewModel.OnBoardingEvent
+import com.application.monkifyapp.screens.plan.viewmodel.DaysCompletedEvent
 import com.application.monkifyapp.screens.plan.viewmodel.PlanViewModel
 import com.application.monkifyapp.screens.task.CategoryTask
 import com.application.monkifyapp.screens.task.TaskViewModel
@@ -48,6 +50,7 @@ import java.time.*
 fun PlanScreen(
     navController:NavController,
     planViewModel: PlanViewModel = hiltViewModel(),
+    event:(DaysCompletedEvent) -> Unit,
     selectedTab:Int,
     onTabSelected: (Int) -> Unit
 ) {
@@ -57,14 +60,17 @@ fun PlanScreen(
     val inCompletedTasks = list.size - completedTasks
     val scope = rememberCoroutineScope()
 
-    var daysCompleted by rememberSaveable() {
-        mutableStateOf(0)
+
+    var daysCompleted by remember{
+        mutableStateOf(planViewModel.daysCompleted.value)
     }
+
     var isDayCompleted by remember{
         mutableStateOf(false)
     }
     if(list.size==completedTasks && !isDayCompleted){
         daysCompleted++
+        planViewModel.updateDaysCompleted(daysCompleted)
         isDayCompleted=true
     }
 
@@ -94,6 +100,7 @@ fun PlanScreen(
             handler.removeCallbacks(resetTask)
         }
     }
+    event(DaysCompletedEvent.SaveDaysCompleted)
 
     MainScaffold(navController = navController,selectedTab,onTabSelected =onTabSelected) {
         Column(
@@ -102,7 +109,7 @@ fun PlanScreen(
                 .statusBarsPadding()
                 .padding(24.dp)
         ) {
-            Title("Here is your plan:$daysCompleted")
+            Title("Here is your plan:${daysCompleted}")
             
             GlassmorpismCard(size = if(list.isNotEmpty()){135.dp}else{100.dp}) {
                 Column(
@@ -309,9 +316,9 @@ fun chooseAchievementEmoji(value :Int) : Int {
     }
 }
 
-@Preview
-@Composable
-fun PlanScreenPreview() {
-    val planViewModel= androidx.lifecycle.viewmodel.compose.viewModel<PlanViewModel>()
-    PlanScreen(navController = rememberNavController(), selectedTab = 1, onTabSelected = {}, planViewModel = planViewModel)
-}
+//@Preview
+//@Composable
+//fun PlanScreenPreview() {
+//    val planViewModel= androidx.lifecycle.viewmodel.compose.viewModel<PlanViewModel>()
+//    PlanScreen(navController = rememberNavController(), selectedTab = 1, onTabSelected = {}, planViewModel = planViewModel)
+//}

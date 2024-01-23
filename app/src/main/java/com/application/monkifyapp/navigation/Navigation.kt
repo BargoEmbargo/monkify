@@ -32,7 +32,14 @@ fun Navigation(startDestination:String) {
             }
         }
         composable(NavigationGraph.PlanScreen.name){
-            PlanScreen(navController = navController,selectedTab=selectedTab, planViewModel = planViewModel){newTab->
+            PlanScreen(navController = navController,
+                selectedTab=selectedTab,
+                planViewModel = planViewModel,
+                event = {
+                    planViewModel.onEvent(it)
+                    println(planViewModel.daysCompleted.value)
+                }
+            ){newTab->
                 selectedTab=newTab
             }
         }

@@ -6,9 +6,7 @@ import com.application.monkifyapp.data.local.InfoDatabase
 import com.application.monkifyapp.data.local.ToggleableInfoDao
 import com.application.monkifyapp.data.manager.LocalUserManagerImpl
 import com.application.monkifyapp.domain.manager.LocalUserManager
-import com.application.monkifyapp.domain.useCases.AppEntryUseCases
-import com.application.monkifyapp.domain.useCases.ReadAppEntry
-import com.application.monkifyapp.domain.useCases.SaveAppEntry
+import com.application.monkifyapp.domain.useCases.*
 import com.application.monkifyapp.util.Constants.DATABASE_NAME
 import dagger.Module
 import dagger.Provides
@@ -32,7 +30,9 @@ object AppModule {
         localUserManger: LocalUserManager
     ): AppEntryUseCases = AppEntryUseCases(
         readAppEntry = ReadAppEntry(localUserManger),
-        saveAppEntry = SaveAppEntry(localUserManger)
+        saveAppEntry = SaveAppEntry(localUserManger),
+        readDaysCompleted = ReadDaysCompleted(localUserManger),
+        saveDaysCompleted = SaveDaysCompleted(localUserManger)
     )
 
     @Provides
