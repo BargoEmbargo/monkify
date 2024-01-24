@@ -38,7 +38,7 @@ fun HomeCardTitle(daysCompleted:Int) {
         LoopingLottieAnimation(animationResId = chooseAchievementEmoji(daysCompleted))
     }
     Text(
-        text = "Good job!\nThis is your longest streak so far \uD83D\uDE0D.",
+        text = chooseAchievementText(daysCompleted),
         modifier = Modifier.padding(start = 24.dp, top = 10.dp),
         color= Color.White,
         )
@@ -46,10 +46,19 @@ fun HomeCardTitle(daysCompleted:Int) {
 
 fun chooseAchievementEmoji(value :Int) : Int {
     return when(value){
-        in 0..3->AchievementEmojis.Sad.res
-        in 4..7->AchievementEmojis.Cool.res
+         0 ->AchievementEmojis.Sad.res
+        in 1..7->AchievementEmojis.Cool.res
         in 8..15->AchievementEmojis.Fire.res
         in 15..10000-> AchievementEmojis.Wow.res
         else -> AchievementEmojis.Sad.res
+    }
+}
+fun chooseAchievementText(value :Int) : String {
+    return when(value){
+         0 ->"Don't worry!\nToday is the perfect day to start your streak \uD83D\uDCAA!"
+        in 1..7->"Keep it up!\nYou're on a roll \uD83D\uDE0E!"
+        in 8..15->"Impressive!\nYou're building a habit \uD83D\uDC4D."
+        in 15..10000-> "Good job!\nThis is your longest streak so far \uD83D\uDE0D."
+        else ->"Don't worry!\nToday is the perfect day to start your streak \uD83D\uDCAA!"
     }
 }
