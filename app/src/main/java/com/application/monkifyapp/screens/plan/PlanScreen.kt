@@ -48,7 +48,9 @@ fun PlanScreen(
     onTabSelected: (Int) -> Unit
 ) {
 
+
     val list = planViewModel.infoList.collectAsState().value
+
     val completedTasks = list.count { it.isChecked }
     val inCompletedTasks = list.size - completedTasks
     val scope = rememberCoroutineScope()
@@ -61,7 +63,8 @@ fun PlanScreen(
     var isDayCompleted by remember{
         mutableStateOf(false)
     }
-    if(list.size==completedTasks && !isDayCompleted){
+
+    if(list.size==completedTasks && !isDayCompleted && list.isNotEmpty()){
         daysCompleted++
         planViewModel.updateDaysCompleted(daysCompleted)
         isDayCompleted=true
@@ -110,6 +113,7 @@ fun PlanScreen(
                         .fillMaxSize()
                         .padding(horizontal = 24.dp, vertical = 14.dp)
                 ) {
+
                     if(list.isNotEmpty()){
                         PieChart(
                             data = mapOf(
@@ -256,27 +260,7 @@ fun SetupText(setUpFunction:()->Unit) {
     )
 }
 
-@Composable
-fun AchievementText(text:String,color:Color) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth(0.5f)
-    ) {
-        Box(modifier = Modifier
-            .size(14.dp)
-            .clip(CircleShape)
-            .background(color = color)
-        )
-        Spacer(modifier = Modifier.width(10.dp))
-        Text(
-            text = text,
-            maxLines = 5,
-            color = Color.White,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.SemiBold
-        )
-    }
-}
+
 @Composable
 fun LoopingLottieAnimation(animationResId: Int) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(animationResId))

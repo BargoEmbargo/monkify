@@ -2,6 +2,7 @@ package com.application.monkifyapp.screens.task
 
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -50,15 +51,47 @@ fun TaskScreen(navController: NavController,id:Int,taskViewModel: TaskViewModel 
     var isSelectedItem by remember{
         mutableStateOf(false)
     }
+    var showDialog by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
-    if(id>0){
+    if(id>=0 && taskViewModel.infoList.value.isNotEmpty()){
         LaunchedEffect(id) {
             val task= taskViewModel.getInfoById(id)
             isSelectedItem=true
             descriptionText=task.descriptionText
             categoryText=task.categoryTask
         }
+    }
+    if (showDialog) {
+        DeleteConfirmationDialog(
+            onConfirm = {
+                // Code to execute when the user confirms deletion
+                scope.launch {
+                    val task = taskViewModel.getInfoById(id = id)
+                    if (id >= 0) {
+                        taskViewModel.deleteInfo(task)
+                        customToastMessage(context = context, message = "Task Deleted")
+                        navController.popBackStack()
+                    } else {
+                        taskViewModel.deleteAllInfo()
+                        taskViewModel.updateInfoList(emptyList())
+                        customToastMessage(context = context, message = "All Tasks Deleted")
+                        Log.d("Empty list", "TaskScreen:${taskViewModel.infoList.value.size} ")
+                        navController.popBackStack()
+                    }
+                }
+
+            },
+            onCancel = {
+                showDialog=false
+            },
+            dismissDialog = {
+                // Code to execute when the dialog is dismissed
+                showDialog = false
+            },
+            titleText = if(id>=0){"Delete Task "}else{"Deleting All Tasks"},
+            contentText = if(id>=0){"Are you sure you want to delete this task?"}else{"Are you sure to delete your current plan? All the progress will be lost"}
+        )
     }
 
 
@@ -111,17 +144,7 @@ fun TaskScreen(navController: NavController,id:Int,taskViewModel: TaskViewModel 
 
                     }, onDeleteClick = {
                         scope.launch {
-                            val task=taskViewModel.getInfoById(id = id)
-                            if(id>0){
-                                taskViewModel.deleteInfo(task)
-                                customToastMessage(context = context, message ="Task Deleted" )
-                                navController.popBackStack()
-                            }else{
-                                taskViewModel.deleteAllInfo()
-                                taskViewModel.updateInfoList(emptyList())
-                                customToastMessage(context = context, message ="All Tasks Deleted" )
-                                navController.popBackStack()
-                            }
+                            showDialog=true
                         }
                     })
                 }
@@ -129,7 +152,52 @@ fun TaskScreen(navController: NavController,id:Int,taskViewModel: TaskViewModel 
         }
     }
 }
-
+@Composable
+fun DeleteConfirmationDialog(
+    onConfirm: () -> Unit,
+    onCancel: () -> Unit,
+    dismissDialog: () -> Unit,
+    titleText:String,
+    contentText:String
+) {
+    AlertDialog(
+        onDismissRequest = { dismissDialog() },
+        containerColor = Color.White,
+        titleContentColor = Color.Black,
+        textContentColor = Color.Black.copy(alpha = 0.8f),
+        title = {
+            Text(text = titleText)
+        },
+        text = {
+            Text(contentText)
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onConfirm()
+                    dismissDialog()
+                }
+            ) {
+                Text(
+                    "Yes",
+                    color = Color(0xFFFF6F6F)
+                )
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    onCancel()
+                    dismissDialog()
+                }
+            ) {
+                Text("No",
+                        color = Color(0xFF726FFF)
+                )
+            }
+        }
+    )
+}
 
 
 

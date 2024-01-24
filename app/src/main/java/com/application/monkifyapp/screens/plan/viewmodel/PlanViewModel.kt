@@ -35,6 +35,7 @@ class PlanViewModel @Inject constructor(
             infoRepository.getArticles().distinctUntilChanged().collect{ listOfInfo->
                 if(listOfInfo.isEmpty()){
                     Log.d("INFO_LIST", "The List Empty: ")
+                    _infoList.value= emptyList()
                 }else{
                     _infoList.value=listOfInfo
                 }

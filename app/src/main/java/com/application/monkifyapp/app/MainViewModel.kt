@@ -48,9 +48,9 @@ class MainViewModel @Inject constructor(
         }.launchIn(viewModelScope)
 
 //        This is for testing purposes only
-        viewModelScope.launch {
-            appEntryUseCases.saveDaysCompleted(2)
-        }
+//        viewModelScope.launch {
+//            appEntryUseCases.saveDaysCompleted(2)
+//        }
         viewModelScope.launch {
             appEntryUseCases.readDaysCompleted.invoke().collect{
                 if (it != null) {
