@@ -13,15 +13,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.application.monkify.screens.plan.LoopingLottieAnimation
-import com.application.monkify.screens.plan.chooseAchievementEmoji
 import com.application.monkifyapp.R
+import com.application.monkifyapp.domain.model.AchievementEmojis
 
 @Composable
-fun HomeCardTitle(daysCompleted:String) {
+fun HomeCardTitle(daysCompleted:Int) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column() {
             Text(
-                text = daysCompleted,
+                text = daysCompleted.toString(),
                 modifier = Modifier.padding(start = 24.dp, top = 24.dp),
                 color= Color.White,
                 fontSize=34.sp,
@@ -35,11 +35,21 @@ fun HomeCardTitle(daysCompleted:String) {
             )
         }
         Spacer(modifier = Modifier.weight(1f))
-        LoopingLottieAnimation(animationResId = chooseAchievementEmoji(1))
+        LoopingLottieAnimation(animationResId = chooseAchievementEmoji(daysCompleted))
     }
     Text(
         text = "Good job!\nThis is your longest streak so far \uD83D\uDE0D.",
         modifier = Modifier.padding(start = 24.dp, top = 10.dp),
         color= Color.White,
         )
+}
+
+fun chooseAchievementEmoji(value :Int) : Int {
+    return when(value){
+        in 0..3->AchievementEmojis.Sad.res
+        in 4..7->AchievementEmojis.Cool.res
+        in 8..15->AchievementEmojis.Fire.res
+        in 15..10000-> AchievementEmojis.Wow.res
+        else -> AchievementEmojis.Sad.res
+    }
 }

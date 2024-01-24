@@ -2,19 +2,13 @@ package com.application.monkifyapp.screens.task
 
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.widget.Space
-import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -24,9 +18,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,23 +28,18 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import androidx.room.util.appendPlaceholders
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.application.monkify.screens.plan.calculateIcon
 import com.application.monkifyapp.R
 import com.application.monkifyapp.common.*
+import com.application.monkifyapp.domain.model.CategoryTask
 import com.application.monkifyapp.domain.model.ToggleableInfo
 import com.application.monkifyapp.screens.home.components.Title
+import com.application.monkifyapp.screens.task.viewmodel.TaskViewModel
 import com.application.monkifyapp.ui.theme.Cyan
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 @Composable
-fun TaskScreen(navController: NavController,id:Int,taskViewModel: TaskViewModel= hiltViewModel()) {
+fun TaskScreen(navController: NavController,id:Int,taskViewModel: TaskViewModel = hiltViewModel()) {
     val context = LocalContext.current
     var descriptionText by remember {
         mutableStateOf("")
@@ -319,32 +306,32 @@ fun DropDownTaskMenu(categoryText1:String,categoryText:(String)->Unit) {
                 expanded = isExpanded,
                 onDismissRequest = { isExpanded=false}) {
                 CustomDropDownItem(imageVector = CategoryTask.Exercise.icon, text = CategoryTask.Exercise.title ) {
-                    menuText=CategoryTask.Exercise.title
+                    menuText= CategoryTask.Exercise.title
                     categoryText(menuText)
                     isExpanded=false
                 }
                 CustomDropDownItem(imageVector = CategoryTask.Stydying.icon, text = CategoryTask.Stydying.title  ) {
-                    menuText=CategoryTask.Stydying.title
+                    menuText= CategoryTask.Stydying.title
                     categoryText(menuText)
                     isExpanded=false
                 }
                 CustomDropDownItem(imageVector = CategoryTask.RidingBike.icon, text = CategoryTask.RidingBike.title  ) {
-                    menuText=CategoryTask.RidingBike.title
+                    menuText= CategoryTask.RidingBike.title
                     categoryText(menuText)
                     isExpanded=false
                 }
                 CustomDropDownItem(imageVector = CategoryTask.PhoneLocked.icon, text = CategoryTask.PhoneLocked.title  ) {
-                    menuText=CategoryTask.PhoneLocked.title
+                    menuText= CategoryTask.PhoneLocked.title
                     categoryText(menuText)
                     isExpanded=false
                 }
                 CustomDropDownItem(imageVector = CategoryTask.Meditating.icon, text = CategoryTask.Meditating.title  ) {
-                    menuText=CategoryTask.Meditating.title
+                    menuText= CategoryTask.Meditating.title
                     categoryText(menuText)
                     isExpanded=false
                 }
                 CustomDropDownItem(imageVector = CategoryTask.Other.icon, text = CategoryTask.Other.title  ) {
-                    menuText=CategoryTask.Other.title
+                    menuText= CategoryTask.Other.title
                     categoryText(menuText)
                     isExpanded=false
                 }

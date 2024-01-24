@@ -10,13 +10,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.application.monkify.screens.home.HomeScreen
 import com.application.monkify.screens.plan.PlanScreen
-import com.application.monkifyapp.domain.useCases.AppEntryUseCases
 import com.application.monkifyapp.screens.onBoarding.BoardingScreen
 import com.application.monkifyapp.screens.onBoarding.viewModel.OnBoardingViewModel
 import com.application.monkifyapp.screens.plan.viewmodel.PlanViewModel
 import com.application.monkifyapp.screens.task.TaskScreen
-import com.application.monkifyapp.screens.task.TaskViewModel
-import kotlinx.coroutines.launch
+import com.application.monkifyapp.screens.task.viewmodel.TaskViewModel
 
 @Composable
 fun Navigation(startDestination:String,daysCompleted:Int) {

@@ -1,4 +1,4 @@
-package com.application.monkifyapp.screens.task
+package com.application.monkifyapp.screens.task.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

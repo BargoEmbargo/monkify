@@ -10,7 +10,6 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,32 +18,26 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.application.monkifyapp.common.MainScaffold
 import com.application.monkifyapp.common.PieChart
-import com.application.monkifyapp.domain.model.AchievementEmojis
 import com.application.monkifyapp.domain.model.ToggleableInfo
 import com.application.monkifyapp.navigation.NavigationGraph
 import com.application.monkifyapp.screens.home.components.GlassmorpismCard
 import com.application.monkifyapp.screens.home.components.Title
-import com.application.monkifyapp.screens.onBoarding.viewModel.OnBoardingEvent
 import com.application.monkifyapp.screens.plan.viewmodel.DaysCompletedEvent
 import com.application.monkifyapp.screens.plan.viewmodel.PlanViewModel
-import com.application.monkifyapp.screens.task.CategoryTask
-import com.application.monkifyapp.screens.task.TaskViewModel
+import com.application.monkifyapp.domain.model.CategoryTask
 import com.application.monkifyapp.ui.theme.Cyan
 import kotlinx.coroutines.launch
-import java.time.*
 
 @Composable
 fun PlanScreen(
@@ -234,15 +227,15 @@ fun CheckBoxGoals(checkList:List<ToggleableInfo>,planViewModel: PlanViewModel,on
 
 fun calculateIcon(categoryName:String):ImageVector{
     return when(categoryName){
-        CategoryTask.Exercise.title->CategoryTask.Exercise.icon
-        CategoryTask.Stydying.title->CategoryTask.Stydying.icon
-        CategoryTask.Reading.title->CategoryTask.Reading.icon
-        CategoryTask.PhoneLocked.title->CategoryTask.PhoneLocked.icon
-        CategoryTask.Meditating.title->CategoryTask.Meditating.icon
-        CategoryTask.RidingBike.title->CategoryTask.RidingBike.icon
-        CategoryTask.SkinCare.title->CategoryTask.SkinCare.icon
-        CategoryTask.Running.title->CategoryTask.Running.icon
-        CategoryTask.Other.title->CategoryTask.Other.icon
+        CategoryTask.Exercise.title-> CategoryTask.Exercise.icon
+        CategoryTask.Stydying.title-> CategoryTask.Stydying.icon
+        CategoryTask.Reading.title-> CategoryTask.Reading.icon
+        CategoryTask.PhoneLocked.title-> CategoryTask.PhoneLocked.icon
+        CategoryTask.Meditating.title-> CategoryTask.Meditating.icon
+        CategoryTask.RidingBike.title-> CategoryTask.RidingBike.icon
+        CategoryTask.SkinCare.title-> CategoryTask.SkinCare.icon
+        CategoryTask.Running.title-> CategoryTask.Running.icon
+        CategoryTask.Other.title-> CategoryTask.Other.icon
         else -> CategoryTask.Exercise.icon
     }
 }
@@ -290,7 +283,7 @@ fun LoopingLottieAnimation(animationResId: Int) {
     composition?.let { composition ->
         LottieAnimation(
             modifier= Modifier
-                .padding(top = 24.dp, end = 10.dp)
+                .padding(top = 24.dp, end = 24.dp)
                 .size(70.dp),
             composition = composition,
             iterations = LottieConstants.IterateForever // This will make the animation loop
@@ -308,13 +301,7 @@ fun PlanTitle(text:String) {
         fontWeight = FontWeight.Bold
     )
 }
-fun chooseAchievementEmoji(value :Int) : Int {
-    return when(value){
-        1-> AchievementEmojis.Fire.res
-        2-> AchievementEmojis.Sad.res
-        else -> AchievementEmojis.Fire.res
-    }
-}
+
 
 //@Preview
 //@Composable

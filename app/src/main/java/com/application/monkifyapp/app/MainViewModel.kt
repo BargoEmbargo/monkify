@@ -46,12 +46,18 @@ class MainViewModel @Inject constructor(
             delay(200) //Without this delay, the onBoarding screen will show for a momentum.
             splashCondition = false
         }.launchIn(viewModelScope)
+
+//        This is for testing purposes only
+        viewModelScope.launch {
+            appEntryUseCases.saveDaysCompleted(2)
+        }
         viewModelScope.launch {
             appEntryUseCases.readDaysCompleted.invoke().collect{
                 if (it != null) {
                    daysCompleted=it
                 }
             }
+
+            }
         }
     }
-}

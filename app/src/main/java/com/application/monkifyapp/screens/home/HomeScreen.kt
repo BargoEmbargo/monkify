@@ -34,7 +34,7 @@ fun HomeScreen(navController: NavController,daysCompleted:Int,selectedTab:Int,on
                Title("Welcome Back!")
                GlassmorpismCard(size=520.dp) {
                    Column {
-                       HomeCardTitle(daysCompleted = daysCompleted.toString())
+                       HomeCardTitle(daysCompleted = daysCompleted)
                        Calendar(sheetState = sheetState,selectedDateRange=selectedDateRange)
                    }
                }

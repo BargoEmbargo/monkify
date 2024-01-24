@@ -1,4 +1,4 @@
-package com.application.monkifyapp.screens.task
+package com.application.monkifyapp.domain.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
