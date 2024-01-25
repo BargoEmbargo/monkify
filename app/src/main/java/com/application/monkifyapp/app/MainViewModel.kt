@@ -49,7 +49,7 @@ class MainViewModel @Inject constructor(
 
 //        This is for testing purposes only
 //        viewModelScope.launch {
-//            appEntryUseCases.saveDaysCompleted(2)
+//            appEntryUseCases.saveDaysCompleted(0)
 //        }
         viewModelScope.launch {
             appEntryUseCases.readDaysCompleted.invoke().collect{
