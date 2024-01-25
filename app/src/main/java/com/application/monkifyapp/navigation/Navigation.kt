@@ -1,5 +1,8 @@
 package com.application.monkifyapp.navigation
 
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -16,18 +19,25 @@ import com.application.monkifyapp.screens.plan.viewmodel.PlanViewModel
 import com.application.monkifyapp.screens.task.TaskScreen
 import com.application.monkifyapp.screens.task.viewmodel.TaskViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Navigation(startDestination:String,daysCompleted:Int) {
     val navController= rememberNavController()
     val viewModel: OnBoardingViewModel = hiltViewModel()
     var selectedTab by rememberSaveable { mutableStateOf(0) }
+    var drawerState= rememberDrawerState(initialValue = DrawerValue.Closed)
     val taskViewModel= androidx.lifecycle.viewmodel.compose.viewModel<TaskViewModel>()
     val planViewModel =androidx.lifecycle.viewmodel.compose.viewModel<PlanViewModel>()
     val route = NavigationGraph.TaskScreen.name
 
     NavHost(navController = navController, startDestination = startDestination ){
         composable(NavigationGraph.HomeScreen.name){
-            HomeScreen(navController = navController,daysCompleted=daysCompleted,selectedTab){newTab->
+            HomeScreen(
+                navController = navController,
+                drawerState=drawerState,
+                daysCompleted=daysCompleted,
+                selectedTab = selectedTab
+            ){ newTab->
                 selectedTab=newTab
             }
         }
@@ -35,6 +45,7 @@ fun Navigation(startDestination:String,daysCompleted:Int) {
             PlanScreen(navController = navController,
                 selectedTab=selectedTab,
                 planViewModel = planViewModel,
+                drawerState=drawerState,
                 event = {
                     planViewModel.onEvent(it)
                     println(planViewModel.daysCompleted.value)

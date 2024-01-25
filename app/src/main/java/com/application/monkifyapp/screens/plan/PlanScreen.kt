@@ -37,11 +37,13 @@ import com.application.monkifyapp.domain.model.CategoryTask
 import com.application.monkifyapp.ui.theme.Cyan
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlanScreen(
     navController:NavController,
     planViewModel: PlanViewModel = hiltViewModel(),
     event:(DaysCompletedEvent) -> Unit,
+    drawerState: DrawerState,
     selectedTab:Int,
     onTabSelected: (Int) -> Unit
 ) {
@@ -103,7 +105,12 @@ fun PlanScreen(
             showInfoDialog=false
         }
     }
-    MainScaffold(navController = navController,selectedTab,onTabSelected =onTabSelected) {
+    MainScaffold(
+        navController = navController,
+        selectedTab =selectedTab,
+        drawerState=drawerState,
+        onTabSelected =onTabSelected,
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()

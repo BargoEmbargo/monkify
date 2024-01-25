@@ -3,6 +3,10 @@ package com.application.monkify.screens.home
 import android.annotation.SuppressLint
 import android.util.Range
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,16 +20,21 @@ import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import java.time.LocalDate
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SuspiciousIndentation")
 @Composable
-fun HomeScreen(navController: NavController,daysCompleted:Int,selectedTab:Int,onTabSelected: (Int) -> Unit,) {
+fun HomeScreen(navController: NavController,
+               daysCompleted:Int,
+               drawerState: DrawerState,
+               selectedTab:Int,
+               onTabSelected: (Int) -> Unit,) {
     val selectedDateRange = remember {
         val value = if(daysCompleted>0){Range(LocalDate.now().minusDays(daysCompleted.toLong() -1), LocalDate.now())}
         else{Range(LocalDate.now(), LocalDate.now())}
         mutableStateOf(value)
     }
     var sheetState = rememberSheetState()
-       MainScaffold(navController = navController,selectedTab, onTabSelected = onTabSelected) {
+       MainScaffold(navController = navController,selectedTab, onTabSelected = onTabSelected,drawerState=drawerState) {
            Column(
                modifier = Modifier
                    .fillMaxSize()
@@ -44,9 +53,12 @@ fun HomeScreen(navController: NavController,daysCompleted:Int,selectedTab:Int,on
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun Proba() {
-    HomeScreen(navController = rememberNavController(), selectedTab = 0, onTabSelected ={} , daysCompleted = 0)
+    HomeScreen(navController = rememberNavController(), selectedTab = 0, onTabSelected ={} , daysCompleted = 0, drawerState = rememberDrawerState(
+        initialValue = DrawerValue.Closed,
+    ))
 }
 
