@@ -1,8 +1,7 @@
 package com.application.monkify.screens.plan
 
 import android.os.Looper
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Checkbox
@@ -69,6 +68,7 @@ fun PlanScreen(
         planViewModel.updateDaysCompleted(daysCompleted)
         isDayCompleted=true
     }
+    var scrollState = rememberScrollState()
 
 // Schedule a task to reset isDayCompleted every 10 seconds for testing
     DisposableEffect(Unit) {
@@ -112,6 +112,7 @@ fun PlanScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(horizontal = 24.dp, vertical = 14.dp)
+
                 ) {
 
                     if(list.isNotEmpty()){
@@ -139,7 +140,7 @@ fun PlanScreen(
             Spacer(modifier = Modifier.height(4.dp))
             GlassmorpismCard(size = calculateCardHeight(itemCount = list.size)) {
                 if(list.isNotEmpty()){
-                    CheckBoxGoals(checkList = list, planViewModel = planViewModel){id->
+                    CheckBoxGoals(checkList = list,scrollState=scrollState, planViewModel = planViewModel){id->
                         navController.navigate("${NavigationGraph.TaskScreen.name}/$id")
                     }
                 }
@@ -166,18 +167,24 @@ fun ifEmptyText(text:String) {
 fun calculateCardHeight(itemCount: Int): Dp {
     return if(itemCount==0){
         100.dp
-    }else{
-        (itemCount * 62).dp
+    }
+    else if(itemCount>5){
+        315.dp
+    }
+    else{
+        (itemCount * 59).dp
     }
 }
 
 @Composable
-fun CheckBoxGoals(checkList:List<ToggleableInfo>,planViewModel: PlanViewModel,onRowClicked:(Int)->Unit) {
+fun CheckBoxGoals(checkList:List<ToggleableInfo>,scrollState: ScrollState,planViewModel: PlanViewModel,onRowClicked:(Int)->Unit) {
     val scope = rememberCoroutineScope()
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 10.dp, vertical = 9.dp)) {
+            .padding(horizontal = 10.dp, vertical = 9.dp)
+            .verticalScroll(state=scrollState)
+    ) {
         checkList.forEachIndexed { index, toggleableInfo ->
             Row(
                 modifier = Modifier
