@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -32,7 +33,6 @@ fun CustomBottomBar(
     val tabs = listOf(
         Icons.Default.Home,
         Icons.Default.Menu,
-        Icons.Default.Person
     )
 
     BottomAppBar(
@@ -49,7 +49,9 @@ fun CustomBottomBar(
     ) {
         tabs.forEachIndexed { index, icon ->
             NavigationBarItem(
-                icon = { Icon(icon, contentDescription = null) },
+
+                icon = { if(selectedTab == index)Icon(icon, contentDescription = null, tint = Cyan)else{Icon(icon, contentDescription = null, tint = Color.White)} },
+                colors=NavigationBarItemDefaults.colors(indicatorColor = Color.White),
                 selected = selectedTab == index,
                 onClick = {
                     if (selectedTab == index) {
