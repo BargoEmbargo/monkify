@@ -11,6 +11,7 @@ data class Page(
     )
 
 val onBoardingPages= listOf(
+
     Page("Unlock Your Potential!",
         R.drawable.background,
         R.drawable.page_one,
@@ -18,16 +19,20 @@ val onBoardingPages= listOf(
                 "Welcome to Monkify, your daily companion on the journey to a more disciplined and successful you. " +
                 "Let's get started!"
     ),
+
     Page("Define Your Path",
         R.drawable.background,
         R.drawable.page_two,
         "Take control of your life by setting clear, achievable goals." +
                 " Monkify helps you define your path and holds you accountable, " +
-                "ensuring you stay on track to turn your dreams into reality."),
+                "ensuring you stay on track to turn your dreams into reality."
+    ),
+
     Page("Cultivate Lasting Habits",
         R.drawable.background,
         R.drawable.page_three,
         "Success isn't a one-time event; it's the result of daily habits. " +
                 "With Monkify, you can build a foundation of discipline that leads to lifelong success. " +
-                "Start your journey today."),
+                "Start your journey today."
+    ),
 )

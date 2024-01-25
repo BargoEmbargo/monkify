@@ -20,7 +20,10 @@ fun PagerIndicator(
     selectedColor: Color = DarkerCyan,
     unselectedColor: Color = Gray,
 ) {
-    Row(modifier = modifier, horizontalArrangement = Arrangement.SpaceBetween) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
         repeat(times = pagesSize) { page ->
             Box(
                 modifier = Modifier

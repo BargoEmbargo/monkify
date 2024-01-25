@@ -25,6 +25,7 @@ class PlanViewModel @Inject constructor(
     private val infoRepository: InfoRepository,
     private val appEntryUseCases: AppEntryUseCases
     ):ViewModel() {
+
     private val _infoList = MutableStateFlow<List<ToggleableInfo>>(emptyList())
     val infoList =_infoList.asStateFlow()
 

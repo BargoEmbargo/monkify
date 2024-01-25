@@ -23,18 +23,25 @@ import java.time.LocalDate
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SuspiciousIndentation")
 @Composable
-fun HomeScreen(navController: NavController,
-               daysCompleted:Int,
-               drawerState: DrawerState,
-               selectedTab:Int,
-               onTabSelected: (Int) -> Unit,) {
+fun HomeScreen(
+    navController: NavController,
+    daysCompleted: Int,
+    drawerState: DrawerState,
+    selectedTab: Int,
+    onTabSelected: (Int) -> Unit,
+) {
     val selectedDateRange = remember {
         val value = if(daysCompleted>0){Range(LocalDate.now().minusDays(daysCompleted.toLong() -1), LocalDate.now())}
         else{Range(LocalDate.now(), LocalDate.now())}
         mutableStateOf(value)
     }
     var sheetState = rememberSheetState()
-       MainScaffold(navController = navController,selectedTab, onTabSelected = onTabSelected,drawerState=drawerState) {
+       MainScaffold(
+           navController = navController,
+           selectedTab=selectedTab,
+           onTabSelected = onTabSelected,
+           drawerState=drawerState
+       ) {
            Column(
                modifier = Modifier
                    .fillMaxSize()

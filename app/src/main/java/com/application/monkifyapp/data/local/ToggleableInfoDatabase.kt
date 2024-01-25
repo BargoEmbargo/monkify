@@ -6,8 +6,7 @@ import androidx.room.TypeConverters
 import com.application.monkifyapp.domain.model.ToggleableInfo
 
 
-@Database(entities = [ToggleableInfo::class],version = 5,)
-//@TypeConverters(NewsTypeConvertor::class)
+@Database(entities = [ToggleableInfo::class],version = 5)
 abstract class InfoDatabase : RoomDatabase() {
 
     abstract val toggleableInfoDao:ToggleableInfoDao

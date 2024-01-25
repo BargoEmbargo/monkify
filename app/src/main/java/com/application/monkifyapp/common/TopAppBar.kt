@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBarMonkify(settingsButtonClicked:() -> Unit = {},drawerState: DrawerState) {
+fun TopAppBarMonkify(drawerState: DrawerState) {
     val scope = rememberCoroutineScope()
     SmallTopAppBar(
         colors = TopAppBarDefaults.smallTopAppBarColors(Color.Transparent),

@@ -22,6 +22,7 @@ import com.application.monkifyapp.screens.task.viewmodel.TaskViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Navigation(startDestination:String,daysCompleted:Int) {
+
     val navController= rememberNavController()
     val viewModel: OnBoardingViewModel = hiltViewModel()
     var selectedTab by rememberSaveable { mutableStateOf(0) }
@@ -30,7 +31,10 @@ fun Navigation(startDestination:String,daysCompleted:Int) {
     val planViewModel =androidx.lifecycle.viewmodel.compose.viewModel<PlanViewModel>()
     val route = NavigationGraph.TaskScreen.name
 
-    NavHost(navController = navController, startDestination = startDestination ){
+    NavHost(
+        navController = navController,
+        startDestination = startDestination )
+    {
         composable(NavigationGraph.HomeScreen.name){
             HomeScreen(
                 navController = navController,
@@ -42,7 +46,8 @@ fun Navigation(startDestination:String,daysCompleted:Int) {
             }
         }
         composable(NavigationGraph.PlanScreen.name){
-            PlanScreen(navController = navController,
+            PlanScreen(
+                navController = navController,
                 selectedTab=selectedTab,
                 planViewModel = planViewModel,
                 drawerState=drawerState,
@@ -55,7 +60,9 @@ fun Navigation(startDestination:String,daysCompleted:Int) {
             }
         }
         composable(NavigationGraph.BoardingScreen.name){
-            BoardingScreen(navController = navController, event = {
+            BoardingScreen(
+                navController = navController,
+                event = {
                 viewModel.onEvent(it)
             })
         }
@@ -67,7 +74,11 @@ fun Navigation(startDestination:String,daysCompleted:Int) {
         ){backStackEntry ->
             // Your composable content
             val id = backStackEntry.arguments?.getInt("id") ?: 0
-            TaskScreen(navController=navController,taskViewModel=taskViewModel,id=id)
+            TaskScreen(
+                navController=navController,
+                taskViewModel=taskViewModel,
+                id=id
+            )
         }
     }
 }

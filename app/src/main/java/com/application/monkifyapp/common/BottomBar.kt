@@ -49,8 +49,10 @@ fun CustomBottomBar(
     ) {
         tabs.forEachIndexed { index, icon ->
             NavigationBarItem(
-
-                icon = { if(selectedTab == index)Icon(icon, contentDescription = null, tint = Cyan)else{Icon(icon, contentDescription = null, tint = Color.White)} },
+                icon = {
+                    if(selectedTab == index)Icon(icon, contentDescription = null, tint = Cyan)
+                    else{Icon(icon, contentDescription = null, tint = Color.White)}
+                       },
                 colors=NavigationBarItemDefaults.colors(indicatorColor = Color.White),
                 selected = selectedTab == index,
                 onClick = {
@@ -58,9 +60,7 @@ fun CustomBottomBar(
                         // Already on the selected tab, no need to recompose or navigate
                         return@NavigationBarItem
                     }
-
                     onTabSelected(index)
-
                     when (index) {
                         0 -> navController.navigate(NavigationGraph.HomeScreen.name)
                         1 -> navController.navigate(NavigationGraph.PlanScreen.name)

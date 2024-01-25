@@ -16,6 +16,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     val viewModel by viewModels<MainViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply {
@@ -29,7 +30,7 @@ class MainActivity : ComponentActivity() {
             MonkifyAppTheme {
                 val startDestination=viewModel.startDestination
                 val daysCompleted=viewModel.daysCompleted
-              Navigation(startDestination = startDestination,daysCompleted=daysCompleted)
+                Navigation(startDestination = startDestination,daysCompleted=daysCompleted)
             }
         }
     }

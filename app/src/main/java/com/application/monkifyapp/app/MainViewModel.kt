@@ -19,8 +19,6 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val appEntryUseCases: AppEntryUseCases
 ): ViewModel() {
-
-
 //    private val _splashCondition = mutableStateOf(true)
 //    val splashCondition: State<Boolean> = _splashCondition
 //
@@ -35,7 +33,6 @@ class MainViewModel @Inject constructor(
 
     var startDestination by mutableStateOf(NavigationGraph.BoardingScreen.name)
     private set
-
     init {
         appEntryUseCases.readAppEntry().onEach { shouldStartFromHomeScreen ->
             if(shouldStartFromHomeScreen){
@@ -57,7 +54,6 @@ class MainViewModel @Inject constructor(
                    daysCompleted=it
                 }
             }
-
-            }
         }
     }
+}

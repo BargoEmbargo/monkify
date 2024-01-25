@@ -16,7 +16,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TaskViewModel @Inject constructor(private val infoRepository: InfoRepository):ViewModel() {
+class TaskViewModel @Inject constructor(
+    private val infoRepository: InfoRepository
+    ):ViewModel() {
+
     private val _infoList =MutableStateFlow<List<ToggleableInfo>>(emptyList())
     val infoList =_infoList.asStateFlow()
      init {

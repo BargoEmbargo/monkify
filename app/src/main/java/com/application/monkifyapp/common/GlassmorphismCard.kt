@@ -27,13 +27,15 @@ fun GlassmorpismCard(
 ) {
     val borderColors = remember { listOf(Color.White.copy(alpha = 0.2f), Color.White.copy(alpha = 0.85f)) }
     val animationDuration = 2000
-
     var currentColorIndex by remember { mutableStateOf(0) }
 
     val color = animateColorAsState(
         targetValue = borderColors[currentColorIndex % borderColors.size],
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = animationDuration, easing = LinearEasing),
+            animation = tween(
+                durationMillis = animationDuration,
+                easing = LinearEasing
+            ),
             repeatMode = RepeatMode.Reverse
         )
     ).value

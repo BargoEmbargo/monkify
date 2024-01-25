@@ -48,13 +48,11 @@ fun PlanScreen(
     onTabSelected: (Int) -> Unit
 ) {
 
-
     val list = planViewModel.infoList.collectAsState().value
 
     val completedTasks = list.count { it.isChecked }
     val inCompletedTasks = list.size - completedTasks
     val scope = rememberCoroutineScope()
-
 
     var daysCompleted by remember{
         mutableStateOf(planViewModel.daysCompleted.value)
@@ -69,6 +67,7 @@ fun PlanScreen(
         planViewModel.updateDaysCompleted(daysCompleted)
         isDayCompleted=true
     }
+
     var showInfoDialog by remember { mutableStateOf(false) }
 
     val scrollState = rememberScrollState()
@@ -92,19 +91,20 @@ fun PlanScreen(
                 print(isDayCompleted)
             }
         }
-
         handler.postDelayed(resetTask, 50 * 1000) // Initial delay for the first execution
-
         onDispose {
             handler.removeCallbacks(resetTask)
         }
     }
+
     event(DaysCompletedEvent.SaveDaysCompleted)
+
     if(showInfoDialog){
         TaskCheckingAlertDialog {
             showInfoDialog=false
         }
     }
+
     MainScaffold(
         navController = navController,
         selectedTab =selectedTab,
@@ -119,14 +119,18 @@ fun PlanScreen(
         ) {
             Title("Here is your plan:")
             
-            GlassmorpismCard(size = if(list.isNotEmpty()){135.dp}else{100.dp}) {
+            GlassmorpismCard(
+                size = if(list.isNotEmpty()){135.dp}
+                else{100.dp}
+            ) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 24.dp, vertical = 14.dp)
-
+                        .padding(
+                            horizontal = 24.dp,
+                            vertical = 14.dp
+                        )
                 ) {
-
                     if(list.isNotEmpty()){
                         PieChart(
                             data = mapOf(
@@ -138,7 +142,6 @@ fun PlanScreen(
                     else{
                         ifEmptyText(text = "No data...")
                     }
-
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
@@ -152,23 +155,27 @@ fun PlanScreen(
                         tint=Color.Gray.copy(alpha = 0.7f),
                         imageVector = Icons.Default.Info, contentDescription ="info_icon" )
                 }
-
                 Spacer(modifier = Modifier.weight(1f))
                 SetupText {
                     navController.navigate("${NavigationGraph.TaskScreen.name}/-1")
                 }
             }
             Spacer(modifier = Modifier.height(4.dp))
-            GlassmorpismCard(size = calculateCardHeight(itemCount = list.size)) {
+            GlassmorpismCard(
+                size = calculateCardHeight(itemCount = list.size)
+            ) {
                 if(list.isNotEmpty()){
-                    CheckBoxGoals(checkList = list,scrollState=scrollState, planViewModel = planViewModel){id->
+                    CheckBoxGoals(
+                        checkList = list,
+                        scrollState=scrollState,
+                        planViewModel = planViewModel
+                    ){id->
                         navController.navigate("${NavigationGraph.TaskScreen.name}/$id")
                     }
                 }
                 else{
                     ifEmptyText(text = "Please set up your daily goal")
                 }
-
             }
         }
     }
@@ -213,7 +220,11 @@ fun TaskCheckingAlertDialog(
 
 @Composable
 fun ifEmptyText(text:String) {
-    Column(modifier=Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier=Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(
             text = text,
             color = Color.White.copy(alpha = 0.5f),
@@ -235,7 +246,12 @@ fun calculateCardHeight(itemCount: Int): Dp {
 }
 
 @Composable
-fun CheckBoxGoals(checkList:List<ToggleableInfo>,scrollState: ScrollState,planViewModel: PlanViewModel,onRowClicked:(Int)->Unit) {
+fun CheckBoxGoals(
+    checkList:List<ToggleableInfo>,
+    scrollState: ScrollState,
+    planViewModel: PlanViewModel,
+    onRowClicked:(Int)->Unit
+) {
     val scope = rememberCoroutineScope()
     Column(
         modifier = Modifier

@@ -29,7 +29,6 @@ fun MainScaffold(
     selectedTab:Int,
     onTabSelected: (Int) -> Unit,
     drawerState: DrawerState ,
-    settingsButtonClicked: () -> Unit = {},
     content: @Composable () -> Unit
 ) {
     ModalNavigationDrawer(
@@ -39,16 +38,21 @@ fun MainScaffold(
             ModalDrawerSheet(
                 drawerContainerColor= Cyan
             ) {
-            Text(text = "Working...")
+                Text(text = "Working...")
             }
         },
-
     ) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            topBar = { TopAppBarMonkify(settingsButtonClicked, drawerState = drawerState) },
+            topBar = {
+                TopAppBarMonkify(
+                    drawerState = drawerState
+                ) },
             bottomBar = {
-                CustomBottomBar(navController = navController, selectedTab = selectedTab)
+                CustomBottomBar(
+                    navController = navController,
+                    selectedTab = selectedTab
+                )
                 { newTab -> onTabSelected(newTab) }
             }
         ) {

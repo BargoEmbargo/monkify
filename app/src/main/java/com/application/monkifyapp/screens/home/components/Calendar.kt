@@ -14,7 +14,10 @@ import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Calendar(sheetState: SheetState, selectedDateRange: MutableState<Range<LocalDate>>) {
+fun Calendar(
+    sheetState: SheetState,
+    selectedDateRange: MutableState<Range<LocalDate>>
+) {
     CalendarView(
         header= Header.Custom{
         },

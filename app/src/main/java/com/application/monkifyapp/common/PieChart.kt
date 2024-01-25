@@ -35,10 +35,6 @@ fun PieChart(
     val totalSum = data.values.sum()
     val floatValue = mutableListOf<Float>()
 
-    // To set the value of each Arc according to
-    // the value given in the data, we have used a simple formula.
-    // For a detailed explanation check out the Medium Article.
-    // The link is in the about section and readme file of this GitHub Repository
     data.values.forEachIndexed { index, values ->
         floatValue.add(index, 360 * values.toFloat() / totalSum.toFloat())
     }
@@ -59,8 +55,6 @@ fun PieChart(
         end = Offset(10f, 300f)
     )
 
-
-
     // Replace the colors list with the gradients
     val gradients = listOf(gradient1, gradient2)
 
@@ -76,8 +70,6 @@ fun PieChart(
         )
     )
 
-    // if you want to stabilize the Pie Chart you can use value -90f
-    // 90f is used to complete 1/4 of the rotation
     val animateRotation by animateFloatAsState(
         targetValue = if (animationPlayed) 360f else 0f,
         animationSpec = tween(
@@ -105,7 +97,6 @@ fun PieChart(
             colors = colors, // Use the gradients here
             modifier = Modifier.weight(1f) // This makes the DetailsPieChart take the remaining width
         )
-
         // Pie Chart using Canvas Arc
         Box(
             modifier = Modifier.size(animateSize.dp),

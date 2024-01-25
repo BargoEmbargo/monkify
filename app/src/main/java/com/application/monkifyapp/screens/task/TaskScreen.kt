@@ -40,20 +40,29 @@ import com.application.monkifyapp.ui.theme.Cyan
 import kotlinx.coroutines.launch
 
 @Composable
-fun TaskScreen(navController: NavController,id:Int,taskViewModel: TaskViewModel = hiltViewModel()) {
+fun TaskScreen(
+    navController: NavController,
+    id:Int,
+    taskViewModel: TaskViewModel = hiltViewModel()
+) {
     val context = LocalContext.current
+
     var descriptionText by remember {
         mutableStateOf("")
     }
+
     var categoryText by remember {
         mutableStateOf("Choose...")
     }
+
     var isSelectedItem by remember{
         mutableStateOf(false)
     }
+
     var showDialog by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
+
     if(id>=0 && taskViewModel.infoList.value.isNotEmpty()){
         LaunchedEffect(id) {
             val task= taskViewModel.getInfoById(id)
@@ -62,6 +71,7 @@ fun TaskScreen(navController: NavController,id:Int,taskViewModel: TaskViewModel 
             categoryText=task.categoryTask
         }
     }
+
     if (showDialog) {
         DeleteConfirmationDialog(
             onConfirm = {
@@ -80,7 +90,6 @@ fun TaskScreen(navController: NavController,id:Int,taskViewModel: TaskViewModel 
                         navController.popBackStack()
                     }
                 }
-
             },
             onCancel = {
                 showDialog=false
@@ -94,7 +103,6 @@ fun TaskScreen(navController: NavController,id:Int,taskViewModel: TaskViewModel 
         )
     }
 
-
     TaskScaffold(navController = navController) {
         Column( modifier = Modifier
             .fillMaxSize()
@@ -106,8 +114,10 @@ fun TaskScreen(navController: NavController,id:Int,taskViewModel: TaskViewModel 
                 modifier=Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Title(title =if(isSelectedItem)"Update Task" else{"Add New Task"})
+                Title(title = if(isSelectedItem)"Update Task" else{"Add New Task"})
+
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
+
                 TaskTextFieldInput(
                     nameValue = descriptionText,
                     onNameChange = {descriptionText=it},
@@ -127,21 +137,28 @@ fun TaskScreen(navController: NavController,id:Int,taskViewModel: TaskViewModel 
                             if(descriptionText.isNotEmpty() && categoryText!="Choose..."){
                                 scope.launch {
                                     if(id>0){
-                                        taskViewModel.upsertInfo(ToggleableInfo(id=id,descriptionText=descriptionText, categoryTask = categoryText))
+                                        taskViewModel.upsertInfo(
+                                            ToggleableInfo(
+                                                id=id,
+                                                descriptionText=descriptionText,
+                                                categoryTask = categoryText)
+                                        )
                                         customToastMessage(context = context, message ="Task updated" )
                                     }
                                     else{
-                                        taskViewModel.upsertInfo(ToggleableInfo(descriptionText=descriptionText, categoryTask = categoryText))
+                                        taskViewModel.upsertInfo(
+                                            ToggleableInfo(
+                                                descriptionText=descriptionText,
+                                                categoryTask = categoryText
+                                            )
+                                        )
                                         customToastMessage(context = context, message ="Task added" )
                                     }
-
                                     descriptionText=""
-
                                 }
                             }else{
                                 customToastMessage(context = context, message ="Please add a description and category for the task" )
                             }
-
                     }, onDeleteClick = {
                         scope.launch {
                             showDialog=true
@@ -232,7 +249,11 @@ fun TaskScreenAppBar(navController: NavController) {
 }
 
 @Composable
-fun CustomIconButtonForTaskAppBar(imageVector: ImageVector,navController: NavController,contentDescription:String) {
+fun CustomIconButtonForTaskAppBar(
+    imageVector: ImageVector,
+    navController: NavController,
+    contentDescription:String
+) {
     IconButton(onClick = { navController.popBackStack() }) {
         Icon(imageVector = imageVector,
             tint = Color.White,
@@ -242,7 +263,11 @@ fun CustomIconButtonForTaskAppBar(imageVector: ImageVector,navController: NavCon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskTextFieldInput(nameValue: String = "", onNameChange: (value: String) -> Unit,textFieldTitle:String) {
+fun TaskTextFieldInput(
+    nameValue: String = "",
+    onNameChange: (value: String) -> Unit,
+    textFieldTitle:String
+) {
     Column(modifier = Modifier.fillMaxWidth()) {
         TaskScreenTitle(text = textFieldTitle)
         Box(modifier = Modifier.fillMaxWidth()) {
@@ -288,10 +313,12 @@ fun TaskTextFieldInput(nameValue: String = "", onNameChange: (value: String) -> 
 
 
 @Composable
-fun TaskButton(onAddClick:()->Unit,onDeleteClick:()->Unit,isSelectedItem:Boolean) {
-    Row(
-
-    ) {
+fun TaskButton(
+    onAddClick:()->Unit,
+    onDeleteClick:()->Unit,
+    isSelectedItem:Boolean
+) {
+    Row{
         Button(
             shape= RoundedCornerShape(4.dp),
             colors= ButtonDefaults.buttonColors(Color(0xFF726FFF)),
@@ -332,9 +359,11 @@ fun TaskButton(onAddClick:()->Unit,onDeleteClick:()->Unit,isSelectedItem:Boolean
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropDownTaskMenu(categoryText1:String,categoryText:(String)->Unit) {
+
     var isExpanded by remember {
         mutableStateOf(false)
     }
+
     var menuText by remember(categoryText1) {
         mutableStateOf(categoryText1)
     }
@@ -342,6 +371,7 @@ fun DropDownTaskMenu(categoryText1:String,categoryText:(String)->Unit) {
     LaunchedEffect(categoryText1) {
         menuText = categoryText1
     }
+
     Column(modifier = Modifier.fillMaxWidth()) {
         TaskScreenTitle(text = "Category")
         Spacer(modifier = Modifier.padding(vertical = 10.dp))
@@ -354,7 +384,7 @@ fun DropDownTaskMenu(categoryText1:String,categoryText:(String)->Unit) {
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = {
-                    Row() {
+                    Row {
                         if(menuText!="Choose...")
                         Icon(
                             imageVector = calculateIcon(menuText),
@@ -364,7 +394,14 @@ fun DropDownTaskMenu(categoryText1:String,categoryText:(String)->Unit) {
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
                     }
                                },
-                colors = ExposedDropdownMenuDefaults.textFieldColors(containerColor = Cyan, textColor = Color.White, unfocusedIndicatorColor = Color.White, focusedIndicatorColor = Color.White, unfocusedTrailingIconColor = Color.White, focusedTrailingIconColor = Color.White),
+                colors = ExposedDropdownMenuDefaults.textFieldColors(
+                    containerColor = Cyan,
+                    textColor = Color.White,
+                    unfocusedIndicatorColor = Color.White,
+                    focusedIndicatorColor = Color.White,
+                    unfocusedTrailingIconColor = Color.White,
+                    focusedTrailingIconColor = Color.White
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .menuAnchor()
@@ -373,38 +410,54 @@ fun DropDownTaskMenu(categoryText1:String,categoryText:(String)->Unit) {
                 modifier=Modifier.background(Cyan),
                 expanded = isExpanded,
                 onDismissRequest = { isExpanded=false}) {
-                CustomDropDownItem(imageVector = CategoryTask.Exercise.icon, text = CategoryTask.Exercise.title ) {
+                CustomDropDownItem(
+                    imageVector = CategoryTask.Exercise.icon,
+                    text = CategoryTask.Exercise.title
+                ) {
                     menuText= CategoryTask.Exercise.title
                     categoryText(menuText)
                     isExpanded=false
                 }
-                CustomDropDownItem(imageVector = CategoryTask.Stydying.icon, text = CategoryTask.Stydying.title  ) {
+                CustomDropDownItem(
+                    imageVector = CategoryTask.Stydying.icon,
+                    text = CategoryTask.Stydying.title
+                ) {
                     menuText= CategoryTask.Stydying.title
                     categoryText(menuText)
                     isExpanded=false
                 }
-                CustomDropDownItem(imageVector = CategoryTask.RidingBike.icon, text = CategoryTask.RidingBike.title  ) {
+                CustomDropDownItem(
+                    imageVector = CategoryTask.RidingBike.icon,
+                    text = CategoryTask.RidingBike.title
+                ) {
                     menuText= CategoryTask.RidingBike.title
                     categoryText(menuText)
                     isExpanded=false
                 }
-                CustomDropDownItem(imageVector = CategoryTask.PhoneLocked.icon, text = CategoryTask.PhoneLocked.title  ) {
+                CustomDropDownItem(
+                    imageVector = CategoryTask.PhoneLocked.icon,
+                    text = CategoryTask.PhoneLocked.title
+                ) {
                     menuText= CategoryTask.PhoneLocked.title
                     categoryText(menuText)
                     isExpanded=false
                 }
-                CustomDropDownItem(imageVector = CategoryTask.Meditating.icon, text = CategoryTask.Meditating.title  ) {
+                CustomDropDownItem(
+                    imageVector = CategoryTask.Meditating.icon,
+                    text = CategoryTask.Meditating.title
+                ) {
                     menuText= CategoryTask.Meditating.title
                     categoryText(menuText)
                     isExpanded=false
                 }
-                CustomDropDownItem(imageVector = CategoryTask.Other.icon, text = CategoryTask.Other.title  ) {
+                CustomDropDownItem(
+                    imageVector = CategoryTask.Other.icon,
+                    text = CategoryTask.Other.title
+                ) {
                     menuText= CategoryTask.Other.title
                     categoryText(menuText)
                     isExpanded=false
                 }
-
-
             }
         }
     }
