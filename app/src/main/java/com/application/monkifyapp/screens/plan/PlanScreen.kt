@@ -4,10 +4,9 @@ import android.os.Looper
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,7 +67,9 @@ fun PlanScreen(
         planViewModel.updateDaysCompleted(daysCompleted)
         isDayCompleted=true
     }
-    var scrollState = rememberScrollState()
+    var showInfoDialog by remember { mutableStateOf(false) }
+
+    val scrollState = rememberScrollState()
 
 // Schedule a task to reset isDayCompleted every 10 seconds for testing
     DisposableEffect(Unit) {
@@ -97,7 +98,11 @@ fun PlanScreen(
         }
     }
     event(DaysCompletedEvent.SaveDaysCompleted)
-
+    if(showInfoDialog){
+        TaskCheckingAlertDialog {
+            showInfoDialog=false
+        }
+    }
     MainScaffold(navController = navController,selectedTab,onTabSelected =onTabSelected) {
         Column(
             modifier = Modifier
@@ -105,7 +110,7 @@ fun PlanScreen(
                 .statusBarsPadding()
                 .padding(24.dp)
         ) {
-            Title("Here is your plan:${daysCompleted}")
+            Title("Here is your plan:")
             
             GlassmorpismCard(size = if(list.isNotEmpty()){135.dp}else{100.dp}) {
                 Column(
@@ -118,8 +123,8 @@ fun PlanScreen(
                     if(list.isNotEmpty()){
                         PieChart(
                             data = mapOf(
-                                Pair("Tasks Left: $inCompletedTasks", inCompletedTasks),
-                                Pair("Tasks finished: $completedTasks", completedTasks),
+                                Pair("$inCompletedTasks tasks remaining!", inCompletedTasks),
+                                Pair("$completedTasks tasks completed", completedTasks),
                             )
                         )
                     }
@@ -131,7 +136,16 @@ fun PlanScreen(
             }
             Spacer(modifier = Modifier.height(10.dp))
             Row(verticalAlignment = Alignment.Bottom) {
-                PlanTitle("Daily goals")
+                Row(verticalAlignment = Alignment.CenterVertically){
+                    PlanTitle("Daily goals")
+                    Icon(
+                        modifier= Modifier
+                            .padding(bottom = 10.dp, start = 10.dp)
+                            .clickable { showInfoDialog = true },
+                        tint=Color.Gray.copy(alpha = 0.7f),
+                        imageVector = Icons.Default.Info, contentDescription ="info_icon" )
+                }
+
                 Spacer(modifier = Modifier.weight(1f))
                 SetupText {
                     navController.navigate("${NavigationGraph.TaskScreen.name}/-1")
@@ -151,6 +165,43 @@ fun PlanScreen(
             }
         }
     }
+}
+
+@Composable
+fun TaskCheckingAlertDialog(
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        containerColor = Color.White,
+        titleContentColor = Color.Black,
+        textContentColor = Color.Black.copy(alpha = 0.8f),
+        onDismissRequest = { onDismiss() },
+        title = {
+            Text("Task checking")
+        },
+        text = {
+            Text(
+                "Don't forget to check your tasks daily or your progress won't be recorded, and you will have to start over again!"
+            )
+        },
+        dismissButton = {
+            Row(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                TextButton(
+                    onClick = { onDismiss() }
+                ) {
+                    Text(
+                        color=Cyan,
+                       text= "I understand")
+                }
+            }
+        },
+        confirmButton = {}
+    )
 }
 
 @Composable
@@ -183,7 +234,7 @@ fun CheckBoxGoals(checkList:List<ToggleableInfo>,scrollState: ScrollState,planVi
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 10.dp, vertical = 9.dp)
-            .verticalScroll(state=scrollState)
+            .verticalScroll(state = scrollState)
     ) {
         checkList.forEachIndexed { index, toggleableInfo ->
             Row(
