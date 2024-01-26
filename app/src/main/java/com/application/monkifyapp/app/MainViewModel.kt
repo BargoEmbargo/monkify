@@ -25,7 +25,7 @@ class MainViewModel @Inject constructor(
 //    private val _startDestination = mutableStateOf(Route.AppStartNavigation.route)
 //    val startDestination: State<String> = _startDestination
 
-    var daysCompleted by mutableStateOf(-1)
+    var daysCompleted by mutableStateOf(0)
         private set
 
     var splashCondition by mutableStateOf(true)
