@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
@@ -32,7 +30,7 @@ fun CustomBottomBar(
 ) {
     val tabs = listOf(
         Icons.Default.Home,
-        Icons.Default.Menu,
+        Icons.Default.Task,
     )
 
     BottomAppBar(
