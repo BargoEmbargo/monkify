@@ -1,10 +1,15 @@
 package com.application.monkifyapp.app
 
+import android.Manifest
 import android.app.Application
+import android.content.pm.PackageManager
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.PeriodicWorkRequestBuilder
@@ -22,6 +27,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    private val notificationBuilder: NotificationCompat.Builder,
+    private val notificationManager: NotificationManagerCompat,
     private val appEntryUseCases: AppEntryUseCases,
     private val application: Application // Inject the Application context
 ) : ViewModel() {
@@ -73,5 +80,31 @@ class MainViewModel @Inject constructor(
             repeatIntervalTimeUnit
         ).build()
         workManager.enqueue(workRequest)
+    }
+
+    //Notification
+    fun showSimpleNotification() {
+        if (ActivityCompat.checkSelfPermission(
+                application,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        notificationManager.notify(1, notificationBuilder.build())
+    }
+
+    fun updateSimpleNotification() {
+        if (ActivityCompat.checkSelfPermission(
+                application,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return print("LOL")
+        }
+        notificationManager.notify(1, notificationBuilder
+            .setContentTitle("NEW TITLE")
+            .build()
+        )
     }
 }

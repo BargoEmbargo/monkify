@@ -30,6 +30,7 @@ class MainActivity : ComponentActivity() {
             MonkifyAppTheme {
                 val startDestination=viewModel.startDestination
                 val daysCompleted=viewModel.daysCompleted
+                viewModel.showSimpleNotification()
                 Navigation(startDestination = startDestination,daysCompleted=daysCompleted)
             }
         }
