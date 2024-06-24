@@ -1,59 +1,77 @@
 package com.application.monkifyapp.app
 
+import android.app.Application
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.application.monkifyapp.domain.useCases.AppEntryUseCases
 import com.application.monkifyapp.navigation.NavigationGraph
+import com.application.monkifyapp.workManager.TaskCompletionWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val appEntryUseCases: AppEntryUseCases
-): ViewModel() {
-//    private val _splashCondition = mutableStateOf(true)
-//    val splashCondition: State<Boolean> = _splashCondition
-//
-//    private val _startDestination = mutableStateOf(Route.AppStartNavigation.route)
-//    val startDestination: State<String> = _startDestination
+    private val appEntryUseCases: AppEntryUseCases,
+    private val application: Application // Inject the Application context
+) : ViewModel() {
 
     var daysCompleted by mutableStateOf(0)
         private set
 
     var splashCondition by mutableStateOf(true)
-    private set
+        private set
 
     var startDestination by mutableStateOf(NavigationGraph.BoardingScreen.name)
-    private set
-    init {
-        appEntryUseCases.readAppEntry().onEach { shouldStartFromHomeScreen ->
-            if(shouldStartFromHomeScreen){
-                startDestination = NavigationGraph.HomeScreen.name
-            }else{
-                startDestination = NavigationGraph.BoardingScreen.name
-            }
-            delay(200) //Without this delay, the onBoarding screen will show for a momentum.
-            splashCondition = false
-        }.launchIn(viewModelScope)
+        private set
 
-//        This is for testing purposes only
-//        viewModelScope.launch {
-//            appEntryUseCases.saveDaysCompleted(0)
-//        }
+    private val workManager = WorkManager.getInstance(application)
+
+    init {
+        initAppEntryUseCases()
+        scheduleTaskCompletionWorker()
+    }
+
+    private fun initAppEntryUseCases() {
         viewModelScope.launch {
-            appEntryUseCases.readDaysCompleted.invoke().collect{
-                if (it != null) {
-                   daysCompleted=it
+            appEntryUseCases.readAppEntry().onEach { shouldStartFromHomeScreen ->
+                startDestination = if (shouldStartFromHomeScreen) {
+                    NavigationGraph.HomeScreen.name
+                } else {
+                    NavigationGraph.BoardingScreen.name
+                }
+                delay(200)
+                splashCondition = false
+            }.launchIn(viewModelScope)
+        }
+
+        viewModelScope.launch {
+            appEntryUseCases.readDaysCompleted().collect { days ->
+                days?.let {
+                    daysCompleted = it
                 }
             }
         }
+    }
+
+    private fun scheduleTaskCompletionWorker() {
+        val repeatInterval = 1L // Interval in minutes
+        val repeatIntervalTimeUnit = TimeUnit.MINUTES
+
+        val workRequest = PeriodicWorkRequestBuilder<TaskCompletionWorker>(
+            repeatInterval, // Repeat interval in minutes
+            repeatIntervalTimeUnit
+        ).build()
+        workManager.enqueue(workRequest)
     }
 }

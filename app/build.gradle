@@ -79,6 +79,8 @@ dependencies {
     implementation "com.google.dagger:hilt-android:2.45"
     kapt "com.google.dagger:hilt-compiler:2.45"
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
+    implementation 'androidx.hilt:hilt-work:1.0.0'
+
 
     //Calendar
     implementation "com.maxkeppeler.sheets-compose-dialogs:core:1.0.2"
@@ -96,7 +98,9 @@ dependencies {
     //Material 3 icons extended
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
 
-
+    //WorkManager
+    def work_version = "2.8.1"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
 
 
 
