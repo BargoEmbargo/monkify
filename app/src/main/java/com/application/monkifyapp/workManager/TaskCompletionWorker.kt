@@ -1,6 +1,11 @@
 package com.application.monkifyapp.workManager
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
@@ -15,18 +20,42 @@ import kotlinx.coroutines.withContext
 
 @HiltWorker
 class TaskCompletionWorker @AssistedInject constructor(
-   @Assisted private val context: Context,
-   @Assisted val params: WorkerParameters,
-   @Assisted val infoRepository: InfoRepository,
-   @Assisted val localUserManager: LocalUserManagerImpl,
+    @Assisted private val context: Context,
+    private val notificationBuilder: NotificationCompat.Builder,
+    private val notificationManager: NotificationManagerCompat,
+    @Assisted private val params: WorkerParameters,
+    private val infoRepository: InfoRepository,
+    private val localUserManager: LocalUserManagerImpl,
 ) : Worker(context, params) {
 
     override fun doWork(): Result {
         return runBlocking {
             val allTasksCompleted = withContext(Dispatchers.IO) { checkAllTasksCompleted() }
             updateDaysCompleted(allTasksCompleted)
+            sendNotification(allTasksCompleted)
             Result.success()
         }
+    }
+    private fun sendNotification(allTasksCompleted: Boolean) {
+        val notification = notificationBuilder
+            .setContentText(if (allTasksCompleted) "All tasks completed!" else "Not all tasks completed.")
+            .build()
+
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        notificationManager.notify(1, notification)
     }
 
     private suspend fun checkAllTasksCompleted(): Boolean {

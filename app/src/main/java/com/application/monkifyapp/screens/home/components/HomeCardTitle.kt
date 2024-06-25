@@ -22,7 +22,7 @@ fun HomeCardTitle(daysCompleted:Int) {
         Column() {
             Text(
                 text = daysCompleted.toString(),
-                modifier = Modifier.padding(start = 24.dp, top = 24.dp),
+                modifier = Modifier.padding(start = 24.dp, top = 12.dp),
                 color= Color.White,
                 fontSize=34.sp,
                 fontWeight = FontWeight.Bold
@@ -39,7 +39,7 @@ fun HomeCardTitle(daysCompleted:Int) {
     }
     Text(
         text = chooseAchievementText(daysCompleted),
-        modifier = Modifier.padding(start = 24.dp, top = 10.dp),
+        modifier = Modifier.padding(start = 24.dp, top = 6.dp),
         color= Color.White,
         )
 }

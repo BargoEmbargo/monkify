@@ -49,7 +49,7 @@ fun HomeScreen(
                    .padding(24.dp)
            ) {
                Title("Welcome Back!")
-               GlassmorpismCard(size=520.dp) {
+               GlassmorpismCard(size=530.dp) {
                    Column {
                        HomeCardTitle(daysCompleted = daysCompleted)
                        Calendar(sheetState = sheetState,selectedDateRange=selectedDateRange)

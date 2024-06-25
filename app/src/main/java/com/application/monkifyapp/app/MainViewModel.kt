@@ -12,8 +12,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 import com.application.monkifyapp.domain.useCases.AppEntryUseCases
 import com.application.monkifyapp.navigation.NavigationGraph
 import com.application.monkifyapp.workManager.TaskCompletionWorker
@@ -27,9 +26,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val notificationBuilder: NotificationCompat.Builder,
-    private val notificationManager: NotificationManagerCompat,
     private val appEntryUseCases: AppEntryUseCases,
+    private val workManager: WorkManager,
     private val application: Application // Inject the Application context
 ) : ViewModel() {
 
@@ -42,7 +40,7 @@ class MainViewModel @Inject constructor(
     var startDestination by mutableStateOf(NavigationGraph.BoardingScreen.name)
         private set
 
-    private val workManager = WorkManager.getInstance(application)
+
 
     init {
         initAppEntryUseCases()
@@ -70,41 +68,32 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+    //workmanager
+//    private fun scheduleTaskCompletionWorker() {
+//        val repeatInterval = 15L // Interval in minutes
+//        val repeatIntervalTimeUnit = TimeUnit.MINUTES
+//
+//        val workRequest = PeriodicWorkRequestBuilder<TaskCompletionWorker>(
+//            repeatInterval, // Repeat interval in minutes
+//            repeatIntervalTimeUnit
+//        ).setInitialDelay(15,TimeUnit.MINUTES).build()
+//        workManager.enqueueUniquePeriodicWork(
+//            "TaskCompletionWork",
+//            ExistingPeriodicWorkPolicy.REPLACE,
+//            workRequest
+//        )
+//    }
 
+    //testing
     private fun scheduleTaskCompletionWorker() {
-        val repeatInterval = 1L // Interval in minutes
-        val repeatIntervalTimeUnit = TimeUnit.MINUTES
-
-        val workRequest = PeriodicWorkRequestBuilder<TaskCompletionWorker>(
-            repeatInterval, // Repeat interval in minutes
-            repeatIntervalTimeUnit
-        ).build()
-        workManager.enqueue(workRequest)
-    }
-
-    //Notification
-    fun showSimpleNotification() {
-        if (ActivityCompat.checkSelfPermission(
-                application,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-        notificationManager.notify(1, notificationBuilder.build())
-    }
-
-    fun updateSimpleNotification() {
-        if (ActivityCompat.checkSelfPermission(
-                application,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return print("LOL")
-        }
-        notificationManager.notify(1, notificationBuilder
-            .setContentTitle("NEW TITLE")
+        val workRequest = OneTimeWorkRequestBuilder<TaskCompletionWorker>()
+            .setInitialDelay(1, TimeUnit.MINUTES)
             .build()
+
+        workManager.enqueueUniqueWork(
+            "TaskCompletionWork",
+            ExistingWorkPolicy.REPLACE,
+            workRequest
         )
     }
 }
