@@ -19,8 +19,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun TopAppBarMonkify(drawerState: DrawerState) {
     val scope = rememberCoroutineScope()
-    SmallTopAppBar(
-        colors = TopAppBarDefaults.smallTopAppBarColors(Color.Transparent),
+    TopAppBar(
+        colors = TopAppBarDefaults.topAppBarColors(Color.Transparent),
         title={},
         modifier = Modifier.statusBarsPadding(),
         actions = {

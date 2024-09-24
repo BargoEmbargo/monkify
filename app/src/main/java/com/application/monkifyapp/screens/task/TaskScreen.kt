@@ -39,6 +39,7 @@ import com.application.monkifyapp.screens.task.viewmodel.TaskViewModel
 import com.application.monkifyapp.ui.theme.Cyan
 import kotlinx.coroutines.launch
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun TaskScreen(
     navController: NavController,
@@ -238,7 +239,7 @@ fun TaskScaffold(
 @Composable
 fun TaskScreenAppBar(navController: NavController) {
     TopAppBar(
-        colors = TopAppBarDefaults.smallTopAppBarColors(Color.Transparent),
+        colors = TopAppBarDefaults.topAppBarColors(Color.Transparent),
         title= {},
         navigationIcon = { CustomIconButtonForTaskAppBar(
             imageVector = Icons.Default.ArrowBack,
@@ -395,8 +396,8 @@ fun DropDownTaskMenu(categoryText1:String,categoryText:(String)->Unit) {
                     }
                                },
                 colors = ExposedDropdownMenuDefaults.textFieldColors(
-                    containerColor = Cyan,
-                    textColor = Color.White,
+//                    containerColor = Cyan,
+//                    textColor = Color.White,
                     unfocusedIndicatorColor = Color.White,
                     focusedIndicatorColor = Color.White,
                     unfocusedTrailingIconColor = Color.White,

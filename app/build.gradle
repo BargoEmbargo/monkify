@@ -3,16 +3,17 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id 'com.google.gms.google-services'
 }
 
 android {
     namespace 'com.application.monkifyapp'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.application.monkifyapp"
         minSdk 27
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -22,12 +23,30 @@ android {
         }
     }
 
+
+    signingConfigs {
+        release {
+            Properties properties = new Properties()
+
+            // Load properties from local.properties
+            properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+            // Access properties
+            storeFile file(properties['KEYSTORE_PATH'] ?: "")
+            storePassword properties['KEYSTORE_PASSWORD'] ?: ""
+            keyAlias properties['KEY_ALIAS'] ?: ""
+            keyPassword properties['KEY_PASSWORD'] ?: ""
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -39,7 +58,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.2.0'
+        kotlinCompilerExtensionVersion '1.5.3'
     }
     packagingOptions {
         resources {
@@ -48,17 +67,19 @@ android {
     }
 }
 
+
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.activity:activity-compose:1.3.1'
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.6'
+    implementation 'androidx.activity:activity-compose:1.9.2'
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation 'androidx.compose.material3:material3:1.0.0-alpha11'
+    implementation 'androidx.compose.material3:material3:1.3.0'
+    implementation 'com.google.firebase:firebase-auth:23.0.0'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
@@ -76,8 +97,8 @@ dependencies {
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
     //Dagger Hilt
-    implementation "com.google.dagger:hilt-android:2.45"
-    kapt "com.google.dagger:hilt-compiler:2.45"
+    implementation "com.google.dagger:hilt-android:2.48"
+    kapt "com.google.dagger:hilt-compiler:2.48"
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
     implementation 'androidx.hilt:hilt-work:1.0.0'
 
@@ -87,10 +108,10 @@ dependencies {
     implementation "com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2"
 
     //Room
-    def room_version = "2.5.2"
+    def room_version = "2.6.1"
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-ktx:2.5.2"
+    implementation "androidx.room:room-ktx:2.6.1"
 
     //Lottie files
     implementation "com.airbnb.android:lottie-compose:6.0.0"
@@ -99,8 +120,11 @@ dependencies {
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
 
     //WorkManager
-    def work_version = "2.8.1"
+    def work_version = "2.9.1"
     implementation "androidx.work:work-runtime-ktx:$work_version"
+
+    //OneTap
+    implementation("com.github.stevdza-san:OneTapCompose:1.0.10")
 
 
 

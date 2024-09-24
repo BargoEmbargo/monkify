@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "814862589929",
+    "project_id": "monkify-436616",
+    "storage_bucket": "monkify-436616.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814862589929:android:4678c2ab5aaa83ce827578",
+        "android_client_info": {
+          "package_name": "com.application.monkifyapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "814862589929-6tb3jkk2h6olp9m8vfo5kmjalpckt6m5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCEQDupp0sPpafnwZYO7mfHvwN0NsRpVw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "814862589929-6tb3jkk2h6olp9m8vfo5kmjalpckt6m5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
